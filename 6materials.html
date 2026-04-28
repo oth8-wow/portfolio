@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Materials for Sustainability · Omar Hathat</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F5F2EB;
+    --paper-dim:#EFEAE0;
+    --paper-deep:#E5DFD0;
+    --ink:#1A1815;
+    --ink-soft:#3D3A34;
+    --ink-mute:#6B6862;
+    --ink-faint:#A8A39A;
+    --accent:#7A4500;          /* Warm earth amber */
+    --accent-bright:#B86800;
+    --accent-glow:#D4922A;
+    --serif:'Fraunces','Times New Roman',serif;
+    --sans:'Inter','Helvetica Neue',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:15px;
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(245,242,235,0.92);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:0.5px solid var(--ink-faint);
+  }
+  nav .inner{
+    max-width:1180px;margin:0 auto;padding:1.1rem 2.5rem;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.05em;
+    text-decoration:none;color:inherit;
+  }
+  .logo svg{animation:spin 22s linear infinite;}
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .nav-links{display:flex;gap:2rem;font-size:13px;align-items:center;}
+  .nav-links a{color:var(--ink);text-decoration:none;transition:color 0.2s;font-size:13px;}
+  .nav-links .home-back{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--ink-mute);}
+  .nav-links a:hover{color:var(--accent);}
+
+  /* ===== LAYOUT ===== */
+  .container{max-width:1180px;margin:0 auto;padding:0 2.5rem;}
+  section.s-block{padding:4rem 0 2.75rem;position:relative;}
+
+  .section-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:0.5px solid var(--ink-faint);
+    padding-bottom:1rem;margin-bottom:2.25rem;
+    flex-wrap:wrap;gap:8px;
+  }
+  .section-head h2{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--ink);font-weight:500;
+  }
+  .section-head .meta{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--ink-mute);}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;padding:3.75rem 0 3.25rem;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;pointer-events:none;opacity:0.22;z-index:0;}
+  .hero .container{position:relative;z-index:2;}
+
+  .tag-pill{
+    display:inline-block;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:0.22em;text-transform:uppercase;
+    padding:7px 16px;border:0.5px solid var(--ink);border-radius:999px;
+    color:var(--ink);margin-bottom:1.5rem;
+  }
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:32px;margin-bottom:2rem;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-mute);
+  }
+  h1.title{
+    font-family:var(--serif);font-weight:300;
+    font-size:clamp(46px,6.4vw,92px);line-height:0.96;
+    letter-spacing:-0.025em;color:var(--ink);max-width:18ch;
+    margin-bottom:2rem;
+  }
+  h1.title em{font-style:italic;font-weight:400;color:var(--accent);}
+
+  p.summary{
+    max-width:62ch;font-size:15.5px;line-height:1.7;
+    color:var(--ink-soft);text-align:justify;hyphens:auto;margin-bottom:1rem;
+  }
+  p.summary em{font-style:italic;font-family:var(--serif);font-size:17px;color:var(--ink);}
+
+  .btn-row{display:flex;gap:14px;margin-top:2.25rem;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:11px 22px;border:0.5px solid var(--ink);border-radius:999px;
+    font-family:var(--sans);font-size:13px;color:var(--ink);
+    text-decoration:none;transition:background .2s,color .2s;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.solid{background:var(--ink);color:var(--paper);}
+  .btn.solid:hover{background:var(--accent);border-color:var(--accent);}
+
+  /* ===== IMPACT STRIP ===== */
+  .impact-strip{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border:0.5px solid var(--ink-faint);
+    background:var(--paper-dim);
+    margin-bottom:2.25rem;
+  }
+  .impact-strip>div{
+    padding:1.25rem 1.5rem;
+    border-right:0.5px solid var(--ink-faint);
+  }
+  .impact-strip>div:last-child{border-right:none;}
+  .is-label{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-mute);margin-bottom:0.4rem;
+  }
+  .is-val{
+    font-family:var(--serif);font-size:30px;font-weight:300;
+    color:var(--accent);line-height:1;letter-spacing:-0.02em;
+  }
+  .is-unit{
+    font-family:var(--mono);font-size:10px;color:var(--ink-mute);
+    letter-spacing:0.1em;margin-top:4px;
+  }
+
+  /* ===== TWO-COL ===== */
+  .two-col{display:grid;grid-template-columns:1fr 1.05fr;gap:3.5rem;align-items:start;}
+
+  .prose p{font-size:14.5px;line-height:1.7;color:var(--ink-soft);text-align:justify;hyphens:auto;}
+  .prose p+p{margin-top:0.85rem;}
+  .prose em{font-style:italic;font-family:var(--serif);font-size:16px;color:var(--ink);}
+
+  ul.bp-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;}
+  ul.bp-list li{
+    position:relative;padding:10px 0 10px 22px;
+    font-size:13.5px;line-height:1.6;color:var(--ink-soft);
+    border-top:0.5px solid var(--ink-faint);
+  }
+  ul.bp-list li:first-child{border-top:none;}
+  ul.bp-list li::before{content:"";position:absolute;left:0;top:18px;width:10px;height:1px;background:var(--accent);}
+  ul.bp-list li strong{color:var(--ink);font-weight:500;}
+
+  /* ===== SVG FIGURE ===== */
+  .fig-frame{
+    background:var(--paper-dim);border:0.5px solid var(--ink-faint);
+    padding:1.5rem;position:relative;
+  }
+  .fig-frame svg{width:100%;height:auto;display:block;}
+  .fig-cap{
+    margin-top:1rem;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-mute);text-align:center;
+  }
+
+  /* ===== DATA CARD ===== */
+  .data-card{
+    background:var(--paper-dim);border-left:2px solid var(--accent);
+    padding:1.4rem 1.6rem;margin-top:1.4rem;
+  }
+  .data-card h4{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-mute);font-weight:500;margin-bottom:0.9rem;
+  }
+  .dl{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:8px;font-size:13px;}
+  .dl dt{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;white-space:nowrap;}
+  .dl dd{color:var(--ink);font-family:var(--serif);font-size:14px;}
+
+  /* ===== PILLAR GRID ===== */
+  .pillar-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border:0.5px solid var(--ink-faint);background:var(--paper-dim);
+  }
+  .pillar-cell{
+    padding:2rem 1.75rem 1.75rem;position:relative;
+    border-right:0.5px solid var(--ink-faint);
+  }
+  .pillar-cell:last-child{border-right:none;}
+  .pillar-num{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.2em;
+    color:var(--ink-mute);text-transform:uppercase;margin-bottom:1rem;
+  }
+  .pillar-icon{margin-bottom:1.1rem;}
+  .pillar-name{
+    font-family:var(--serif);font-weight:400;font-style:italic;
+    font-size:22px;color:var(--ink);line-height:1.2;margin-bottom:0.6rem;
+  }
+  .pillar-role{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:1.4rem;}
+  .pillar-metric{border-top:0.5px solid var(--ink-faint);padding-top:1rem;display:flex;flex-direction:column;gap:4px;}
+  .pillar-metric .label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase;}
+  .pillar-metric .value{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--accent);}
+  .pillar-metric .unit{font-family:var(--mono);font-size:11px;color:var(--ink-mute);margin-top:2px;}
+
+  /* ===== INLINE MINI CHART (inside pillar) ===== */
+  .mini-chart{
+    margin-top:1rem;padding-top:0.75rem;
+    border-top:0.5px solid var(--ink-faint);
+  }
+  .mini-chart svg{width:100%;height:auto;display:block;}
+
+  /* ===== MATERIALS TABLE ===== */
+  .mat-table{border:0.5px solid var(--ink-faint);background:var(--paper-dim);}
+  .mat-row{
+    display:grid;grid-template-columns:100px 1fr 80px 60px;
+    align-items:center;gap:0;
+    border-bottom:0.5px solid var(--ink-faint);
+  }
+  .mat-row:last-child{border-bottom:none;}
+  .mat-row.head{background:var(--ink);color:var(--paper);}
+  .mat-cell{
+    padding:0.7rem 1rem;font-size:12px;
+    border-right:0.5px solid var(--ink-faint);
+  }
+  .mat-cell:last-child{border-right:none;}
+  .mat-row.head .mat-cell{
+    font-family:var(--mono);font-size:9px;letter-spacing:0.18em;
+    text-transform:uppercase;color:rgba(245,242,235,0.7);
+  }
+  .mat-name{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink);}
+  .mat-temp{font-family:var(--mono);font-size:11px;color:var(--ink-mute);}
+  .mat-zt{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:500;}
+
+  /* ===== DARK IMPACT BAND ===== */
+  .impact-band{
+    background:var(--ink);color:var(--paper);
+    padding:4rem 0 3.5rem;position:relative;overflow:hidden;
+  }
+  .impact-band::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(to right,rgba(245,242,235,0.04) 1px,transparent 1px),
+      linear-gradient(to bottom,rgba(245,242,235,0.04) 1px,transparent 1px);
+    background-size:40px 40px;pointer-events:none;
+  }
+  .impact-band .container{position:relative;z-index:2;}
+  .impact-band .section-head{border-bottom-color:rgba(245,242,235,0.18);}
+  .impact-band .section-head h2{color:var(--paper);}
+  .impact-band .section-head .meta{color:rgba(245,242,235,0.55);}
+
+  .ledger-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border-top:0.5px solid rgba(245,242,235,0.18);
+    border-bottom:0.5px solid rgba(245,242,235,0.18);
+  }
+  .ledger-grid>div{padding:1.6rem 1.5rem 1.6rem 0;border-right:0.5px solid rgba(245,242,235,0.18);}
+  .ledger-grid>div:last-child{border-right:none;padding-right:0;}
+  .ledger-grid>div+div{padding-left:1.75rem;}
+  .lk{font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,242,235,0.55);margin-bottom:0.6rem;}
+  .lv{font-family:var(--serif);font-size:54px;font-weight:300;line-height:1;color:var(--paper);letter-spacing:-0.02em;}
+  .lv .unit{font-family:var(--mono);font-size:13px;color:var(--accent-glow);letter-spacing:0.1em;margin-left:6px;}
+  .ld{margin-top:0.9rem;font-size:13px;color:rgba(245,242,235,0.7);line-height:1.55;}
+
+  .pull-quote{
+    margin-top:2.25rem;
+    font-family:var(--serif);font-style:italic;font-weight:300;
+    font-size:20px;line-height:1.45;
+    color:rgba(245,242,235,0.85);max-width:64ch;
+  }
+  .pull-quote .qmark{
+    font-family:var(--mono);font-style:normal;font-size:11px;
+    letter-spacing:0.18em;color:var(--accent-glow);
+    margin-right:14px;vertical-align:middle;
+  }
+
+  .stat-row{
+    margin-top:2.25rem;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:0.5px solid rgba(245,242,235,0.18);
+    padding-top:1.4rem;
+  }
+  .stat-row .sk{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,235,0.5);margin-bottom:6px;}
+  .stat-row .sv{font-family:var(--serif);font-size:22px;color:var(--paper);font-style:italic;}
+  .stat-row .sd{font-size:11.5px;color:rgba(245,242,235,0.55);margin-top:4px;line-height:1.4;}
+
+  /* ===== PROJECT FOOTER ===== */
+  .project-footer{
+    border-top:0.5px solid var(--ink-faint);
+    padding:2.5rem 0 5rem;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:20px;
+  }
+  .pf-link{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;transition:color .2s;}
+  .pf-link:hover{color:var(--accent);}
+  .pf-link .pfk{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase;}
+  .pf-link .pfv{font-family:var(--serif);font-style:italic;font-size:18px;}
+
+  footer.site{
+    border-top:0.5px solid var(--ink-faint);padding:1.6rem 0;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-mute);text-align:center;
+  }
+
+  /* ===== REVEAL ===== */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:960px){
+    .pillar-grid{grid-template-columns:1fr;}
+    .pillar-cell{border-right:none;border-bottom:0.5px solid var(--ink-faint);}
+    .pillar-cell:last-child{border-bottom:none;}
+    .two-col{grid-template-columns:1fr;gap:2rem;}
+    .impact-strip{grid-template-columns:repeat(2,1fr);}
+    .impact-strip>div:nth-child(2){border-right:none;}
+    .impact-strip>div:nth-child(3){border-top:0.5px solid var(--ink-faint);}
+    .ledger-grid{grid-template-columns:1fr;}
+    .ledger-grid>div{border-right:none;border-bottom:0.5px solid rgba(245,242,235,0.18);padding:1.4rem 0!important;}
+    .ledger-grid>div:last-child{border-bottom:none;}
+    .stat-row{grid-template-columns:repeat(2,1fr);gap:1.2rem;}
+  }
+  @media(max-width:560px){
+    .impact-strip{grid-template-columns:1fr;}
+    .impact-strip>div{border-right:none;border-bottom:0.5px solid var(--ink-faint);}
+    .stat-row{grid-template-columns:1fr;}
+    .mat-row{grid-template-columns:90px 1fr 70px 50px;}
+    .container{padding:0 22px;}
+    nav .inner{padding:14px 22px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="inner">
+    <a href="index.html#top" class="logo">
+      <svg width="22" height="22" viewBox="-22 -22 44 44">
+        <g>
+          <circle cx="0" cy="0" r="14" fill="none" stroke="#1A1815" stroke-width="0.8"/>
+          <circle cx="0" cy="0" r="6"  fill="none" stroke="#1A1815" stroke-width="0.8"/>
+          <g stroke="#1A1815" stroke-width="0.8" fill="none">
+            <line x1="0" y1="-18" x2="0" y2="-14"/>
+            <line x1="0" y1="14"  x2="0" y2="18"/>
+            <line x1="-18" y1="0" x2="-14" y2="0"/>
+            <line x1="14"  y1="0" x2="18"  y2="0"/>
+            <g transform="rotate(45)">
+              <line x1="0" y1="-18" x2="0" y2="-14"/>
+              <line x1="0" y1="14"  x2="0" y2="18"/>
+              <line x1="-18" y1="0" x2="-14" y2="0"/>
+              <line x1="14"  y1="0" x2="18"  y2="0"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span>ABOUT.ME</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#domains">Domains</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html" class="home-back">← Home</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+
+  <!-- Hero SVG: materials science / crystalline lattice theme -->
+  <svg class="hero-bg" viewBox="0 0 1280 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <pattern id="dot-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <circle cx="20" cy="20" r="0.8" fill="#1A1815" opacity="0.18"/>
+      </pattern>
+    </defs>
+    <rect width="1280" height="560" fill="url(#dot-grid)"/>
+
+    <!-- Crystalline hexagonal lattice — graphene-inspired, right-aligned -->
+    <!-- Hex side s=34px, pointy-top. Each col dx=58.9, each row dy=51. Odd cols offset +25.5 -->
+    <!-- Bond length = s = 34, atoms at vertices -->
+    <g stroke="#7A4500" stroke-width="0.8" fill="none" opacity="0.7">
+      <!-- Row A: y=70, even cols -->
+      <polygon points="700,70 728.9,54 757.7,70 757.7,102 728.9,118 700,102"/>
+      <polygon points="757.7,70 786.5,54 815.4,70 815.4,102 786.5,118 757.7,102"/>
+      <polygon points="815.4,70 844.2,54 873,70 873,102 844.2,118 815.4,102"/>
+      <polygon points="873,70 901.8,54 930.7,70 930.7,102 901.8,118 873,102"/>
+      <polygon points="930.7,70 959.5,54 988.4,70 988.4,102 959.5,118 930.7,102"/>
+      <polygon points="988.4,70 1017.2,54 1046,70 1046,102 1017.2,118 988.4,102"/>
+      <polygon points="1046,70 1074.8,54 1103.7,70 1103.7,102 1074.8,118 1046,102"/>
+      <polygon points="1103.7,70 1132.5,54 1161.3,70 1161.3,102 1132.5,118 1103.7,102"/>
+      <polygon points="1161.3,70 1190.1,54 1219,70 1219,102 1190.1,118 1161.3,102"/>
+      <!-- Row B: y=172, odd cols offset -->
+      <polygon points="728.9,172 757.7,156 786.5,172 786.5,204 757.7,220 728.9,204"/>
+      <polygon points="786.5,172 815.4,156 844.2,172 844.2,204 815.4,220 786.5,204"/>
+      <polygon points="844.2,172 873,156 901.8,172 901.8,204 873,220 844.2,204"/>
+      <polygon points="901.8,172 930.7,156 959.5,172 959.5,204 930.7,220 901.8,204"/>
+      <polygon points="959.5,172 988.4,156 1017.2,172 1017.2,204 988.4,220 959.5,204"/>
+      <polygon points="1017.2,172 1046,156 1074.8,172 1074.8,204 1046,220 1017.2,204"/>
+      <polygon points="1074.8,172 1103.7,156 1132.5,172 1132.5,204 1103.7,220 1074.8,204"/>
+      <polygon points="1132.5,172 1161.3,156 1190.1,172 1190.1,204 1161.3,220 1132.5,204"/>
+      <polygon points="1190.1,172 1219,156 1247.8,172 1247.8,204 1219,220 1190.1,204"/>
+      <!-- Row C: y=274, even cols -->
+      <polygon points="700,274 728.9,258 757.7,274 757.7,306 728.9,322 700,306"/>
+      <polygon points="757.7,274 786.5,258 815.4,274 815.4,306 786.5,322 757.7,306"/>
+      <polygon points="815.4,274 844.2,258 873,274 873,306 844.2,322 815.4,306"/>
+      <polygon points="873,274 901.8,258 930.7,274 930.7,306 901.8,322 873,306"/>
+      <polygon points="930.7,274 959.5,258 988.4,274 988.4,306 959.5,322 930.7,306"/>
+      <polygon points="988.4,274 1017.2,258 1046,274 1046,306 1017.2,322 988.4,306"/>
+      <polygon points="1046,274 1074.8,258 1103.7,274 1103.7,306 1074.8,322 1046,306"/>
+      <polygon points="1103.7,274 1132.5,258 1161.3,274 1161.3,306 1132.5,322 1103.7,306"/>
+      <polygon points="1161.3,274 1190.1,258 1219,274 1219,306 1190.1,322 1161.3,306"/>
+      <polygon points="1219,274 1247.8,258 1276.6,274 1276.6,306 1247.8,322 1219,306"/>
+      <!-- Row D: y=376, odd cols -->
+      <polygon points="728.9,376 757.7,360 786.5,376 786.5,408 757.7,424 728.9,408"/>
+      <polygon points="786.5,376 815.4,360 844.2,376 844.2,408 815.4,424 786.5,408"/>
+      <polygon points="844.2,376 873,360 901.8,376 901.8,408 873,424 844.2,408"/>
+      <polygon points="901.8,376 930.7,360 959.5,376 959.5,408 930.7,424 901.8,408"/>
+      <polygon points="959.5,376 988.4,360 1017.2,376 1017.2,408 988.4,424 959.5,408"/>
+      <polygon points="1017.2,376 1046,360 1074.8,376 1074.8,408 1046,424 1017.2,408"/>
+      <polygon points="1074.8,376 1103.7,360 1132.5,376 1132.5,408 1103.7,424 1074.8,408"/>
+      <polygon points="1132.5,376 1161.3,360 1190.1,376 1190.1,408 1161.3,424 1132.5,408"/>
+      <!-- Row E: y=478 -->
+      <polygon points="700,478 728.9,462 757.7,478 757.7,510 728.9,526 700,510"/>
+      <polygon points="757.7,478 786.5,462 815.4,478 815.4,510 786.5,526 757.7,510"/>
+      <polygon points="815.4,478 844.2,462 873,478 873,510 844.2,526 815.4,510"/>
+      <polygon points="873,478 901.8,462 930.7,478 930.7,510 901.8,526 873,510"/>
+      <polygon points="930.7,478 959.5,462 988.4,478 988.4,510 959.5,526 930.7,510"/>
+      <polygon points="988.4,478 1017.2,462 1046,478 1046,510 1017.2,526 988.4,510"/>
+      <polygon points="1046,478 1074.8,462 1103.7,478 1103.7,510 1074.8,526 1046,510"/>
+      <polygon points="1103.7,478 1132.5,462 1161.3,478 1161.3,510 1132.5,526 1103.7,510"/>
+    </g>
+
+    <!-- Highlighted hexagon (accent) — representing "target material" -->
+    <polygon points="930.7,274 959.5,258 988.4,274 988.4,306 959.5,322 930.7,306"
+             stroke="#D4922A" stroke-width="1.8" fill="#D4922A" fill-opacity="0.08" opacity="1"/>
+    <circle cx="959.5" cy="290" r="5" fill="#D4922A" fill-opacity="0.8"/>
+
+    <!-- Atom circles at some vertices -->
+    <g fill="#7A4500" opacity="0.55">
+      <circle cx="700"    cy="70"  r="2.5"/>
+      <circle cx="728.9"  cy="54"  r="2.5"/>
+      <circle cx="757.7"  cy="70"  r="2.5"/>
+      <circle cx="757.7"  cy="102" r="2.5"/>
+      <circle cx="728.9"  cy="118" r="2.5"/>
+      <circle cx="700"    cy="102" r="2.5"/>
+      <circle cx="844.2"  cy="172" r="2.5"/>
+      <circle cx="873"    cy="156" r="2.5"/>
+      <circle cx="901.8"  cy="172" r="2.5"/>
+      <circle cx="901.8"  cy="204" r="2.5"/>
+      <circle cx="873"    cy="220" r="2.5"/>
+      <circle cx="844.2"  cy="204" r="2.5"/>
+      <circle cx="988.4"  cy="274" r="3"/>
+      <circle cx="1017.2" cy="258" r="3"/>
+      <circle cx="1046"   cy="274" r="3"/>
+      <circle cx="1046"   cy="306" r="3"/>
+      <circle cx="1017.2" cy="322" r="3"/>
+      <circle cx="988.4"  cy="306" r="3"/>
+      <circle cx="1132.5" cy="376" r="2.5"/>
+      <circle cx="1161.3" cy="360" r="2.5"/>
+      <circle cx="1190.1" cy="376" r="2.5"/>
+    </g>
+
+    <!-- Larger glowing atom at highlight -->
+    <circle cx="959.5" cy="258" r="4" fill="#D4922A" opacity="0.9"/>
+    <circle cx="959.5" cy="322" r="4" fill="#D4922A" opacity="0.9"/>
+    <circle cx="930.7" cy="274" r="4" fill="#D4922A" opacity="0.9"/>
+    <circle cx="930.7" cy="306" r="4" fill="#D4922A" opacity="0.9"/>
+    <circle cx="988.4" cy="274" r="4" fill="#D4922A" opacity="0.9"/>
+    <circle cx="988.4" cy="306" r="4" fill="#D4922A" opacity="0.9"/>
+
+    <!-- Measurement annotation lines -->
+    <g stroke="#7A4500" stroke-width="0.4" stroke-dasharray="3 3" opacity="0.5">
+      <line x1="959.5" y1="190" x2="959.5" y2="254"/>
+      <line x1="880" y1="290" x2="926" y2="290"/>
+      <line x1="993" y1="290" x2="1060" y2="290"/>
+    </g>
+    <text x="959.5" y="185" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#7A4500" letter-spacing="0.12em" opacity="0.7">Bi₂Te₃ · zT=1.3</text>
+    <text x="1068" y="293" font-family="ui-monospace,monospace" font-size="7.5" fill="#7A4500" letter-spacing="0.1em" opacity="0.7">OPTIMUM SELECTION</text>
+  </svg>
+
+  <div class="container">
+    <span class="tag-pill reveal">06 / Materials &amp; Sustainability</span>
+
+    <div class="meta-row reveal">
+      <span>UCL</span>
+      <span>EMS522U · 2022/23</span>
+      <span>Individual Report 2</span>
+      <span>2,935 words · 20 Sources</span>
+    </div>
+
+    <h1 class="title reveal">Materials for <em>Sustainability</em></h1>
+
+    <p class="summary reveal">
+      An analytical survey covering UK energy trends, hydrogen fuel cell technology, thermoelectric generators, and permanent magnet motors — examining each through the lens of <em>materials selection, sustainability, and market readiness</em>. Research drew on government energy statistics, Ansys EduPack Eco-Audit methodology, and primary academic literature across all four domains.
+    </p>
+
+    <div class="btn-row reveal">
+      <a href="index.html#work" class="btn solid">Other projects &rarr;</a>
+      <a href="index.html#contact" class="btn">Get in touch &darr;</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- ============ § 01 / UK ENERGY LANDSCAPE ============ -->
+<section class="s-block" id="energy">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 01 / UK Energy Landscape</h2>
+      <span class="meta">Production trends 1990–2022 · consumption · geopolitics</span>
+    </div>
+
+    <!-- Impact strip -->
+    <div class="impact-strip reveal">
+      <div>
+        <div class="is-label">Coal production decline</div>
+        <div class="is-val">−99.8<span style="font-size:18px;font-style:normal;">%</span></div>
+        <div class="is-unit">56.4 Mtoe (1990) → 0.7 Mtoe (2021)</div>
+      </div>
+      <div>
+        <div class="is-label">Total output 2021 vs 2000</div>
+        <div class="is-val">−63<span style="font-size:18px;font-style:normal;">%</span></div>
+        <div class="is-unit">288.7 Mtoe → 106.6 Mtoe · lowest since 1970</div>
+      </div>
+      <div>
+        <div class="is-label">Renewables Q2 2022</div>
+        <div class="is-val">38.6<span style="font-size:18px;font-style:normal;">%</span></div>
+        <div class="is-unit">of electricity generation · 2% behind fossil fuels</div>
+      </div>
+      <div>
+        <div class="is-label">Russian gas share, UK 2021</div>
+        <div class="is-val">4<span style="font-size:18px;font-style:normal;">%</span></div>
+        <div class="is-unit">vs 40% for wider Europe · Norway primary supplier</div>
+      </div>
+    </div>
+
+    <!-- Two-col: brief notes + energy chart -->
+    <div class="two-col">
+      <div class="reveal">
+        <div class="prose">
+          <p>The UK's total primary energy production fell from its peak of <strong>288.7 Mtoe</strong> in 2000 to just <strong>106.6 Mtoe</strong> in 2021 — the lowest figure since 1970. The primary driver was the deliberate wind-down of fossil fuel extraction: coal collapsed almost entirely, while primary oil and natural gas each fell by nearly 70% from their respective peaks.</p>
+          <p>The COVID-19 pandemic created a sharp but temporary contraction in 2020 — transport energy dropped 28%, services by 8.4% — before rebounding in 2021–22 with the re-opening of workplaces, schools, and international aviation. The geopolitical shock of the Russia–Ukraine conflict disproportionately affected mainland Europe; for the UK, security risk was limited but price exposure was severe.</p>
+        </div>
+
+        <ul class="bp-list" style="margin-top:1.25rem;">
+          <li><strong>Forties Pipeline shutdown 2021</strong> — 3-week maintenance outage drove a 21% production uptick in Q2 2022, totalling 27.4 Mtoe.</li>
+          <li><strong>Primary electricity &amp; bioenergy</strong> — the only two categories growing since 1990; bioenergy rose from 0.7 → 12.8 Mtoe over 31 years.</li>
+          <li><strong>Nuclear forecast</strong> — 9 active reactors, 6.5 GW current; new-build programme targets 24 GW by 2050 (25% of UK electricity).</li>
+          <li><strong>1.1 million</strong> renewable installations by end 2021 — greatest since 2015, adding 7,200 MW of PV-led capacity.</li>
+        </ul>
+      </div>
+
+      <div class="fig-frame reveal">
+        <!-- UK Primary Energy Production Chart 1990–2021 -->
+        <svg viewBox="0 0 480 270" aria-label="UK primary energy production by fuel 1990-2021">
+          <!-- Axes -->
+          <line x1="52" y1="16" x2="52" y2="210" stroke="#1A1815" stroke-width="0.6"/>
+          <line x1="52" y1="210" x2="466" y2="210" stroke="#1A1815" stroke-width="0.6"/>
+
+          <!-- Y-axis labels (Mtoe) -->
+          <g font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862" text-anchor="end">
+            <text x="46" y="19">150</text>
+            <text x="46" y="59">120</text>
+            <text x="46" y="99">90</text>
+            <text x="46" y="139">60</text>
+            <text x="46" y="179">30</text>
+            <text x="46" y="213">0</text>
+          </g>
+          <g stroke="#1A1815" stroke-width="0.25" stroke-dasharray="2 4" opacity="0.3">
+            <line x1="52" y1="19" x2="466" y2="19"/>
+            <line x1="52" y1="59" x2="466" y2="59"/>
+            <line x1="52" y1="99" x2="466" y2="99"/>
+            <line x1="52" y1="139" x2="466" y2="139"/>
+            <line x1="52" y1="179" x2="466" y2="179"/>
+          </g>
+
+          <!-- Scale: 1 Mtoe = 1.28px (194/150). Bottom y=210 -->
+          <!-- Y = 210 - value*1.28 -->
+          <!-- Groups at x: 1990=84, 2000=168, 2010=252, 2019=336, 2021=420 -->
+          <!-- 4 bars per group (Oil, Gas, Coal, Renew+Elec), width=14, gap=2 -->
+
+          <!-- 1990: oil=100.1→83px, gas=45.5→38, coal=56.4→47, elec+bio=17.4→14 -->
+          <g opacity="0.88">
+            <!-- 1990 -->
+            <rect x="68"  y="82"  width="13" height="128" fill="#7A4500"/><!-- oil 100.1 -->
+            <rect x="83"  y="161" width="13" height="49"  fill="#B86800"/><!-- gas 45.5 -->
+            <rect x="98"  y="138" width="13" height="72"  fill="#A8A39A"/><!-- coal 56.4 -->
+            <rect x="113" y="188" width="13" height="22"  fill="#3B6D11" fill-opacity="0.7"/><!-- renew 17.4 -->
+            <!-- 2000 -->
+            <rect x="152" y="33"  width="13" height="177" fill="#7A4500"/><!-- oil 138.3 -->
+            <rect x="167" y="71"  width="13" height="139" fill="#B86800"/><!-- gas 108.4 -->
+            <rect x="182" y="185" width="13" height="25"  fill="#A8A39A"/><!-- coal 19.6 -->
+            <rect x="197" y="185" width="13" height="25"  fill="#3B6D11" fill-opacity="0.7"/><!-- renew 22.5 -->
+            <!-- 2010 -->
+            <rect x="236" y="122" width="13" height="88"  fill="#7A4500"/><!-- oil 69 -->
+            <rect x="251" y="139" width="13" height="71"  fill="#B86800"/><!-- gas 55.3 -->
+            <rect x="266" y="195" width="13" height="15"  fill="#A8A39A"/><!-- coal 11.4 -->
+            <rect x="281" y="178" width="13" height="32"  fill="#3B6D11" fill-opacity="0.7"/><!-- renew 20.9 -->
+            <!-- 2019 -->
+            <rect x="320" y="136" width="13" height="74"  fill="#7A4500"/><!-- oil 57.5 -->
+            <rect x="335" y="162" width="13" height="48"  fill="#B86800"/><!-- gas 37.5 -->
+            <rect x="350" y="208" width="13" height="2"   fill="#A8A39A"/><!-- coal 1.8 -->
+            <rect x="365" y="163" width="13" height="47"  fill="#3B6D11" fill-opacity="0.7"/><!-- renew 30.9 -->
+            <!-- 2021 -->
+            <rect x="404" y="153" width="13" height="57"  fill="#7A4500"/><!-- oil 44.7 -->
+            <rect x="419" y="170" width="13" height="40"  fill="#B86800"/><!-- gas 31.3 -->
+            <rect x="434" y="209" width="13" height="1"   fill="#A8A39A"/><!-- coal 0.7 -->
+            <rect x="449" y="162" width="13" height="48"  fill="#3B6D11" fill-opacity="0.7"/><!-- renew 29.8 -->
+          </g>
+
+          <!-- X-axis labels -->
+          <g font-family="ui-monospace,monospace" font-size="8" fill="#6B6862" text-anchor="middle">
+            <text x="99"  y="224">1990</text>
+            <text x="183" y="224">2000</text>
+            <text x="267" y="224">2010</text>
+            <text x="351" y="224">2019</text>
+            <text x="435" y="224">2021</text>
+          </g>
+
+          <!-- Title -->
+          <text x="260" y="10" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.14em">UK PRIMARY ENERGY PRODUCTION · MILLION TONNES OIL EQUIVALENT</text>
+
+          <!-- Legend -->
+          <g font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862" transform="translate(60,238)">
+            <rect x="0"   y="0" width="8" height="8" fill="#7A4500"/>
+            <text x="12"  y="7.5">Primary oil</text>
+            <rect x="72"  y="0" width="8" height="8" fill="#B86800"/>
+            <text x="84"  y="7.5">Natural gas</text>
+            <rect x="152" y="0" width="8" height="8" fill="#A8A39A"/>
+            <text x="164" y="7.5">Coal</text>
+            <rect x="206" y="0" width="8" height="8" fill="#3B6D11" fill-opacity="0.7"/>
+            <text x="218" y="7.5">Electricity &amp; bioenergy</text>
+          </g>
+
+          <!-- Annotation: coal line -->
+          <line x1="104" y1="138" x2="104" y2="58" stroke="#A8A39A" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <text x="106" y="55" font-family="ui-monospace,monospace" font-size="6.5" fill="#A8A39A">56.4</text>
+          <text x="440" y="207" font-family="ui-monospace,monospace" font-size="6.5" fill="#A8A39A">0.7</text>
+          <line x1="430" y1="209" x2="430" y2="200" stroke="#A8A39A" stroke-width="0.5" stroke-dasharray="2 2"/>
+
+          <!-- Decline arrow for oil -->
+          <line x1="75" y1="85" x2="411" y2="156" stroke="#7A4500" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.6"/>
+        </svg>
+        <div class="fig-cap">Fig. 01 · UK primary energy production 1990–2021 · Primary oil · Gas · Coal · Elec &amp; bioenergy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 02 / TECHNOLOGY TRIAD ============ -->
+<section class="s-block" style="background:var(--paper-dim);">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 02 / Technology Assessment</h2>
+      <span class="meta">Fuel cells · thermoelectrics · permanent magnet motors</span>
+    </div>
+
+    <div class="pillar-grid reveal">
+
+      <!-- FUEL CELLS -->
+      <div class="pillar-cell">
+        <div class="pillar-num">Domain I</div>
+        <div class="pillar-icon">
+          <!-- Hydrogen fuel cell icon: H₂ molecule splitting at anode -->
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="4"  y="14" width="36" height="16" rx="1" stroke="#7A4500" stroke-width="0.8" fill="#7A4500" fill-opacity="0.08"/>
+            <line x1="22" y1="14" x2="22" y2="30" stroke="#7A4500" stroke-width="0.6"/>
+            <!-- Anode side: H atoms -->
+            <circle cx="10" cy="22" r="4" stroke="#7A4500" stroke-width="0.8" fill="#7A4500" fill-opacity="0.15"/>
+            <text x="10" y="24.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#7A4500">H</text>
+            <!-- Cathode side: O + H₂O -->
+            <circle cx="34" cy="22" r="4" stroke="#B86800" stroke-width="0.8" fill="#B86800" fill-opacity="0.12"/>
+            <text x="34" y="24.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#B86800">O</text>
+            <!-- Electrons flowing: dashed line top -->
+            <path d="M 10,14 Q 22,4 34,14" stroke="#7A4500" stroke-width="0.7" stroke-dasharray="2 2" fill="none"/>
+            <text x="22" y="8" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#7A4500">e⁻</text>
+            <!-- Water output -->
+            <text x="34" y="39" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#6B6862">H₂O</text>
+            <line x1="34" y1="30" x2="34" y2="36" stroke="#6B6862" stroke-width="0.5" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+        <div class="pillar-name">Hydrogen Fuel Cells</div>
+        <div class="pillar-role">PEM cells split H₂ at the anode; electrons generate current while protons combine with O₂ at the cathode to form water. No recharging — continuous operation from fuel supply alone.</div>
+        <div class="pillar-metric">
+          <span class="label">Energy efficiency</span>
+          <span class="value">Up to 60%</span>
+          <span class="unit">vs 30–35% combustion — more than double</span>
+        </div>
+        <!-- Mini efficiency comparison bars -->
+        <div class="mini-chart">
+          <svg viewBox="0 0 200 56" aria-label="Efficiency comparison">
+            <text x="0" y="10" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.12em">EFFICIENCY COMPARISON</text>
+            <text x="0" y="26" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862">Combustion</text>
+            <rect x="68" y="16" width="100" height="10" rx="2" fill="#E5DFD0"/>
+            <rect x="68" y="16" width="35" height="10" rx="2" fill="#A8A39A"/>
+            <text x="106" y="25" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">35%</text>
+            <text x="0" y="46" font-family="ui-monospace,monospace" font-size="7.5" fill="#7A4500">Fuel Cell</text>
+            <rect x="68" y="36" width="100" height="10" rx="2" fill="#E5DFD0"/>
+            <rect x="68" y="36" width="60" height="10" rx="2" fill="#7A4500"/>
+            <text x="131" y="45" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">60%</text>
+          </svg>
+        </div>
+        <div class="data-card" style="margin-top:0.75rem;">
+          <h4>Key challenge · PEM</h4>
+          <dl class="dl">
+            <dt>Catalyst</dt><dd>Platinum — expensive, scarce, limits commercialisation</dd>
+            <dt>Research</dt><dd>Graphene support + Pt nanoparticles (QMUL / UCL study)</dd>
+            <dt>Lifespan</dt><dd>8,000 hr (light vehicles) · 30,000 hr (heavy) — ideal conditions only</dd>
+            <dt>Market 2030</dt><dd>$42.3B · 23.2% CAGR (Grand View Research)</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- THERMOELECTRICS -->
+      <div class="pillar-cell">
+        <div class="pillar-num">Domain II</div>
+        <div class="pillar-icon">
+          <!-- TEG icon: hot/cold gradient with voltage arrow -->
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="4" y="6" width="14" height="32" rx="1" fill="#993C1D" fill-opacity="0.15" stroke="#993C1D" stroke-width="0.8"/>
+            <text x="11" y="25" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#993C1D">N</text>
+            <text x="11" y="11" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#993C1D">T_hot</text>
+            <rect x="26" y="6" width="14" height="32" rx="1" fill="#185FA5" fill-opacity="0.12" stroke="#185FA5" stroke-width="0.8"/>
+            <text x="33" y="25" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#185FA5">P</text>
+            <text x="33" y="11" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#185FA5">T_cold</text>
+            <!-- Top connector -->
+            <rect x="8" y="4" width="28" height="3" rx="1" fill="#7A4500" fill-opacity="0.4"/>
+            <!-- Bottom connector + load -->
+            <rect x="8" y="37" width="28" height="3" rx="1" fill="#7A4500" fill-opacity="0.4"/>
+            <line x1="22" y1="40" x2="22" y2="44" stroke="#7A4500" stroke-width="0.8"/>
+            <text x="22" y="44" text-anchor="middle" font-family="ui-monospace,monospace" font-size="5" fill="#7A4500">V</text>
+          </svg>
+        </div>
+        <div class="pillar-name">Thermoelectric Generators</div>
+        <div class="pillar-role">Seebeck effect: charge carriers migrate away from the hot side, generating a voltage potential across p-type and n-type semiconductor thermoelements. No moving parts; used in Mars rovers and off-grid remote sites.</div>
+        <div class="pillar-metric">
+          <span class="label">Figure of merit peak</span>
+          <span class="value">zT = 2.6</span>
+          <span class="unit">Selenide single crystal — research stage (not commercialised)</span>
+        </div>
+        <!-- zT bar chart -->
+        <div class="mini-chart">
+          <svg viewBox="0 0 200 56" aria-label="zT values for thermoelectric materials">
+            <text x="0" y="10" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.12em">FIGURE OF MERIT zT</text>
+            <text x="0" y="26" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862">Bi₂Te₃</text>
+            <rect x="42" y="16" width="100" height="9" rx="1" fill="#E5DFD0"/>
+            <rect x="42" y="16" width="50" height="9" rx="1" fill="#7A4500" fill-opacity="0.6"/>
+            <text x="145" y="24" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">~1.0</text>
+            <text x="0" y="38" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862">Zn₄Sb₃</text>
+            <rect x="42" y="28" width="100" height="9" rx="1" fill="#E5DFD0"/>
+            <rect x="42" y="28" width="65" height="9" rx="1" fill="#B86800" fill-opacity="0.7"/>
+            <text x="145" y="36" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">1.3</text>
+            <text x="0" y="50" font-family="ui-monospace,monospace" font-size="7.5" fill="#7A4500">Selenide</text>
+            <rect x="42" y="40" width="100" height="9" rx="1" fill="#E5DFD0"/>
+            <rect x="42" y="40" width="100" height="9" rx="1" fill="#7A4500"/>
+            <text x="145" y="48" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">2.6 ★</text>
+          </svg>
+        </div>
+        <div class="data-card" style="margin-top:0.75rem;">
+          <h4>Materials by temperature band</h4>
+          <dl class="dl">
+            <dt>&lt;450 K</dt><dd>Bismuth Telluride (Bi₂Te₃) · selenium/antimony alloys</dd>
+            <dt>&lt;850 K</dt><dd>Lead Telluride (PbTe) alloys</dd>
+            <dt>&lt;1300 K</dt><dd>Silicon Germanium (SiGe) · highest operating range</dd>
+            <dt>Market 2030</dt><dd>$1.5B · 12% CAGR · US holds &gt;60% share</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- ELECTRIC MOTORS -->
+      <div class="pillar-cell">
+        <div class="pillar-num">Domain III</div>
+        <div class="pillar-icon">
+          <!-- Permanent magnet motor icon -->
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <!-- Stator ring -->
+            <circle cx="22" cy="22" r="18" stroke="#7A4500" stroke-width="0.8" fill="none"/>
+            <circle cx="22" cy="22" r="13" stroke="#7A4500" stroke-width="0.5" fill="none" stroke-dasharray="3 2"/>
+            <!-- Rotor -->
+            <circle cx="22" cy="22" r="8" stroke="#7A4500" stroke-width="0.8" fill="#7A4500" fill-opacity="0.1"/>
+            <!-- Magnet poles -->
+            <path d="M 22,14 A 8 8 0 0 1 30,22 L 22,22 Z" fill="#7A4500" fill-opacity="0.35"/>
+            <path d="M 22,30 A 8 8 0 0 1 14,22 L 22,22 Z" fill="#993C1D" fill-opacity="0.25"/>
+            <text x="26" y="20" font-family="ui-monospace,monospace" font-size="5.5" fill="#7A4500">N</text>
+            <text x="16" y="27" font-family="ui-monospace,monospace" font-size="5.5" fill="#993C1D">S</text>
+            <!-- Windings tick marks on stator -->
+            <g stroke="#7A4500" stroke-width="0.5">
+              <line x1="22" y1="4"  x2="22" y2="8"/>
+              <line x1="36.7" y1="9.3" x2="34" y2="11.9"/>
+              <line x1="40" y1="22" x2="36" y2="22"/>
+              <line x1="36.7" y1="34.7" x2="34" y2="32.1"/>
+              <line x1="22" y1="40" x2="22" y2="36"/>
+              <line x1="7.3" y1="34.7" x2="10" y2="32.1"/>
+              <line x1="4" y1="22" x2="8" y2="22"/>
+              <line x1="7.3" y1="9.3" x2="10" y2="11.9"/>
+            </g>
+          </svg>
+        </div>
+        <div class="pillar-name">Permanent Magnet Motors</div>
+        <div class="pillar-role">Hard magnets (NdFeB, Ferrites, SmCo) produce constant magnetic flux without excitation circuits. SPM and IPM configurations used in Tesla Model 3, Chevrolet Bolt, and industrial EV drivetrains.</div>
+        <div class="pillar-metric">
+          <span class="label">EV fleet growth 2014–2019</span>
+          <span class="value">+1,100%</span>
+          <span class="unit">0.4 M → 4.8 M units globally (IEA)</span>
+        </div>
+        <!-- EV bar chart -->
+        <div class="mini-chart">
+          <svg viewBox="0 0 200 56" aria-label="EV growth 2014-2019">
+            <text x="0" y="10" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.12em">EV UNITS GLOBAL (MILLIONS)</text>
+            <g font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" text-anchor="middle">
+              <rect x="4"   y="44" width="14" height="6"  rx="1" fill="#7A4500" fill-opacity="0.4"/>
+              <text x="11"  y="54">14</text>
+              <rect x="24"  y="40" width="14" height="10" rx="1" fill="#7A4500" fill-opacity="0.5"/>
+              <text x="31"  y="54">15</text>
+              <rect x="44"  y="34" width="14" height="16" rx="1" fill="#7A4500" fill-opacity="0.6"/>
+              <text x="51"  y="54">16</text>
+              <rect x="64"  y="26" width="14" height="24" rx="1" fill="#7A4500" fill-opacity="0.7"/>
+              <text x="71"  y="54">17</text>
+              <rect x="84"  y="17" width="14" height="33" rx="1" fill="#7A4500" fill-opacity="0.85"/>
+              <text x="91"  y="54">18</text>
+              <rect x="104" y="11" width="14" height="39" rx="1" fill="#7A4500"/>
+              <text x="111" y="54">19</text>
+            </g>
+            <g font-family="ui-monospace,monospace" font-size="6.5" fill="#7A4500">
+              <text x="9"   y="42">0.4</text>
+              <text x="104" y="9">4.8</text>
+            </g>
+          </svg>
+        </div>
+        <div class="data-card" style="margin-top:0.75rem;">
+          <h4>Material performance hierarchy</h4>
+          <dl class="dl">
+            <dt>Hard Ferrites</dt><dd>Most abundant · cost-effective · lower energy density</dd>
+            <dt>SmCo</dt><dd>High temperature stability · expensive · mid-tier adoption</dd>
+            <dt>NdFeB</dt><dd>Strongest magnet manufactured · radioactive waste in mining</dd>
+            <dt>Market 2026</dt><dd>$52B · 10% CAGR · Asia-Pacific fastest growing</dd>
+          </dl>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 03 / QUANTIFIED FINDINGS (DARK BAND) ============ -->
+<section class="impact-band">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 03 / Quantified Research Findings</h2>
+      <span class="meta">Cross-technology key numbers</span>
+    </div>
+
+    <div class="ledger-grid reveal">
+      <div>
+        <div class="lk">Fuel cell vs combustion</div>
+        <div class="lv">&times;2<span class="unit">efficiency</span></div>
+        <div class="ld">Up to 60% for hydrogen PEM cells against 30–35% for combustion power — without generating any polluting byproducts. Commercially limited by platinum catalyst cost.</div>
+      </div>
+      <div>
+        <div class="lk">UK coal production collapse</div>
+        <div class="lv">−99.8<span class="unit">%</span></div>
+        <div class="ld">From 56.4 million tonnes in 1990 to just 700,000 tonnes in 2021, driven by environmental policy and market economics rather than resource depletion.</div>
+      </div>
+      <div>
+        <div class="lk">Global EV fleet growth</div>
+        <div class="lv">+1,100<span class="unit">%</span></div>
+        <div class="ld">From 400,000 units in 2014 to 4.8 million in 2019 (IEA). Underpins the entire demand surge for NdFeB permanent magnet motors and rare-earth supply chains.</div>
+      </div>
+    </div>
+
+    <p class="pull-quote reveal">
+      <span class="qmark">UCL EMS522U · 2022</span>
+      Each technology surveyed faces the same core tension: the materials that make it work best — platinum, bismuth alloys, neodymium — are either scarce, expensive, or extracted through environmentally inconsiderate processes. Sustainability cannot be achieved by technology alone; it requires a materials rethink at every layer.
+    </p>
+
+    <div class="stat-row reveal">
+      <div>
+        <div class="sk">Fuel cell market · 2030</div>
+        <div class="sv">$42.3B</div>
+        <div class="sd">23.2% CAGR · stationary cells market leader · transport rising fast</div>
+      </div>
+      <div>
+        <div class="sk">Thermoelectric market · 2030</div>
+        <div class="sv">$1.5B</div>
+        <div class="sd">12% CAGR · US &gt;60% share · space &amp; military anchor sectors</div>
+      </div>
+      <div>
+        <div class="sk">Perm. magnet motors · 2026</div>
+        <div class="sv">$52B</div>
+        <div class="sd">10% CAGR · from $30B (2020) · Asia-Pacific is fastest-growing market</div>
+      </div>
+      <div>
+        <div class="sk">Nuclear capacity · UK 2050</div>
+        <div class="sv">24 GW</div>
+        <div class="sd">New-build programme target · from 6.5 GW today · 25% of UK electricity</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 04 / MATERIALS RESEARCH ============ -->
+<section class="s-block">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 04 / Materials Research &amp; Sustainability Outlook</h2>
+      <span class="meta">EcoAudit methodology · emerging materials · market horizon</span>
+    </div>
+
+    <div class="two-col" style="grid-template-columns:1fr 1fr;gap:2.5rem;">
+      <div class="reveal">
+        <!-- Thermoelectric materials table -->
+        <div class="mat-table">
+          <div class="mat-row head">
+            <div class="mat-cell">Material</div>
+            <div class="mat-cell">Application / Field</div>
+            <div class="mat-cell">Max Temp</div>
+            <div class="mat-cell">zT</div>
+          </div>
+          <div class="mat-row">
+            <div class="mat-cell"><span class="mat-name">Bi₂Te₃</span></div>
+            <div class="mat-cell" style="font-size:12px;color:var(--ink-soft);">Commercial · refrigeration · wearables</div>
+            <div class="mat-cell mat-temp">450 K</div>
+            <div class="mat-cell mat-zt">~1.0</div>
+          </div>
+          <div class="mat-row">
+            <div class="mat-cell"><span class="mat-name">BiSbTe</span></div>
+            <div class="mat-cell" style="font-size:12px;color:var(--ink-soft);">Low power · bulk nanostructured</div>
+            <div class="mat-cell mat-temp">450 K</div>
+            <div class="mat-cell mat-zt">~1.2</div>
+          </div>
+          <div class="mat-row">
+            <div class="mat-cell"><span class="mat-name">Zn₄Sb₃</span></div>
+            <div class="mat-cell" style="font-size:12px;color:var(--ink-soft);">Emerging · low thermal conductivity</div>
+            <div class="mat-cell mat-temp">670 K</div>
+            <div class="mat-cell mat-zt">1.3</div>
+          </div>
+          <div class="mat-row">
+            <div class="mat-cell"><span class="mat-name">PbTe</span></div>
+            <div class="mat-cell" style="font-size:12px;color:var(--ink-soft);">Mid-range · heat recovery · industrial</div>
+            <div class="mat-cell mat-temp">850 K</div>
+            <div class="mat-cell mat-zt">~1.5</div>
+          </div>
+          <div class="mat-row">
+            <div class="mat-cell"><span class="mat-name">SiGe</span></div>
+            <div class="mat-cell" style="font-size:12px;color:var(--ink-soft);">Space · Mars rover radioisotope TEG</div>
+            <div class="mat-cell mat-temp">1300 K</div>
+            <div class="mat-cell mat-zt">~1.0</div>
+          </div>
+          <div class="mat-row" style="background:var(--paper-dim);">
+            <div class="mat-cell"><span class="mat-name" style="color:var(--accent);">Selenide SC</span></div>
+            <div class="mat-cell" style="font-size:12px;color:var(--ink-soft);">Research only · single crystal · not commercialised</div>
+            <div class="mat-cell mat-temp">—</div>
+            <div class="mat-cell mat-zt" style="color:var(--accent);font-size:13px;">2.6 ★</div>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <h4>Cross-technology sustainability barriers</h4>
+          <dl class="dl">
+            <dt>Fuel cells</dt><dd>Platinum catalyst — expensive; graphene replacement under research at QMUL/UCL</dd>
+            <dt>Thermoelectrics</dt><dd>Bismuth alloys extracted via environmentally harmful mining; limited market availability</dd>
+            <dt>NdFeB motors</dt><dd>Neodymium mining generates permanent radioactive waste and toxic slurry pools</dd>
+            <dt>Shared path</dt><dd>All three converge on the same need: cheaper, cleaner, more abundant substitute materials</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="fig-frame">
+          <!-- Combined market projection chart: all three technologies -->
+          <svg viewBox="0 0 440 300" aria-label="Market projection comparison across technologies">
+            <text x="220" y="14" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862" letter-spacing="0.14em">PROJECTED MARKET SIZE · USD BILLION</text>
+
+            <!-- Y axis -->
+            <line x1="60" y1="28" x2="60" y2="220" stroke="#1A1815" stroke-width="0.5"/>
+            <line x1="60" y1="220" x2="420" y2="220" stroke="#1A1815" stroke-width="0.5"/>
+
+            <g font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" text-anchor="end">
+              <text x="54" y="31">60</text>
+              <text x="54" y="61">50</text>
+              <text x="54" y="91">40</text>
+              <text x="54" y="121">30</text>
+              <text x="54" y="151">20</text>
+              <text x="54" y="181">10</text>
+              <text x="54" y="223">0</text>
+            </g>
+            <g stroke="#1A1815" stroke-width="0.2" opacity="0.25" stroke-dasharray="2 4">
+              <line x1="60" y1="31" x2="420" y2="31"/>
+              <line x1="60" y1="61" x2="420" y2="61"/>
+              <line x1="60" y1="91" x2="420" y2="91"/>
+              <line x1="60" y1="121" x2="420" y2="121"/>
+              <line x1="60" y1="151" x2="420" y2="151"/>
+              <line x1="60" y1="181" x2="420" y2="181"/>
+            </g>
+
+            <!-- Scale: 1B = (220-31)/60 ≈ 3.15px -->
+            <!-- 3 groups: Fuel Cell (2030 $42.3B), Thermoelectric (2030 $1.5B), Perm Magnet (2026 $52B) -->
+            <!-- Y = 220 - value * 3.15 -->
+
+            <!-- Group 1: Fuel Cells — bar at x=130, base year + target -->
+            <rect x="90"  y="153" width="40" height="67" rx="2" fill="#7A4500" fill-opacity="0.22" stroke="#7A4500" stroke-width="0.5"/>
+            <rect x="90"  y="153" width="40" height="67" rx="2" fill="#7A4500" fill-opacity="0.22"/>
+            <!-- 2022 start bar: $8.8B ≈ 28px -->
+            <rect x="90"  y="192" width="40" height="28" rx="2" fill="#7A4500" fill-opacity="0.6"/>
+            <!-- 2030 target line -->
+            <line x1="86"  y1="87" x2="134" y2="87" stroke="#7A4500" stroke-width="1" stroke-dasharray="4 2"/>
+            <text x="80"  y="85" text-anchor="end" font-family="ui-monospace,monospace" font-size="8" fill="#7A4500">$42.3B</text>
+            <!-- label -->
+            <text x="110" y="238" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">FUEL</text>
+            <text x="110" y="247" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">CELLS</text>
+            <text x="110" y="256" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">2030</text>
+
+            <!-- Group 2: Thermoelectrics — x=220 -->
+            <!-- $1.5B = 4.7px — very small bar, show as inset -->
+            <rect x="200" y="215" width="40" height="5" rx="1" fill="#B86800"/>
+            <line x1="196" y1="215" x2="244" y2="215" stroke="#B86800" stroke-width="1" stroke-dasharray="4 2"/>
+            <text x="246" y="217" font-family="ui-monospace,monospace" font-size="8" fill="#B86800">$1.5B</text>
+            <text x="220" y="238" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#B86800">THERMO-</text>
+            <text x="220" y="247" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#B86800">ELECTRIC</text>
+            <text x="220" y="256" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">2030</text>
+
+            <!-- Group 3: Perm Magnet Motors — x=340 -->
+            <rect x="305" y="57" width="40" height="163" rx="2" fill="#7A4500" fill-opacity="0.1" stroke="#7A4500" stroke-width="0.5"/>
+            <!-- 2020: $30B = 94.5px → rect from y=220-94.5=125.5 -->
+            <rect x="305" y="125" width="40" height="95" rx="2" fill="#7A4500" fill-opacity="0.45"/>
+            <line x1="301" y1="57" x2="349" y2="57" stroke="#7A4500" stroke-width="1" stroke-dasharray="4 2"/>
+            <text x="355" y="59" font-family="ui-monospace,monospace" font-size="8" fill="#7A4500">$52B</text>
+            <text x="325" y="238" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">PERM.</text>
+            <text x="325" y="247" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">MAGNETS</text>
+            <text x="325" y="256" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">2026</text>
+
+            <!-- Legend: solid = achieved/current, lighter = target -->
+            <rect x="60"  y="275" width="10" height="7" fill="#7A4500" fill-opacity="0.55"/>
+            <text x="74"  y="281" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">Current / 2020 base</text>
+            <rect x="180" y="275" width="10" height="7" fill="none" stroke="#7A4500" stroke-dasharray="3 2" stroke-width="0.8"/>
+            <text x="194" y="281" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">Projected target</text>
+
+            <!-- CAGR annotations -->
+            <g font-family="ui-monospace,monospace" font-size="7.5" fill="#D4922A" letter-spacing="0.06em">
+              <text x="110" y="148">23.2% CAGR</text>
+              <text x="174" y="212">12% CAGR</text>
+              <text x="297" y="120">10% CAGR</text>
+            </g>
+          </svg>
+          <div class="fig-cap">Fig. 04 · Projected market size: fuel cells ($42.3B / 2030) · thermoelectrics ($1.5B / 2030) · permanent magnet motors ($52B / 2026)</div>
+        </div>
+
+        <div class="fig-frame" style="margin-top:1.25rem;">
+          <!-- Graphene research pathway for PEM -->
+          <svg viewBox="0 0 440 110" aria-label="Graphene research pathway for fuel cell catalysts">
+            <text x="220" y="13" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.14em">GRAPHENE CATALYST RESEARCH PATHWAY · QMUL / UCL</text>
+            <!-- Stage nodes -->
+            <g>
+              <!-- S1: Problem -->
+              <rect x="10"  y="24" width="72" height="34" rx="2" fill="#E5DFD0" stroke="#A8A39A" stroke-width="0.5"/>
+              <text x="46"  y="37" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">PROBLEM</text>
+              <text x="46"  y="49" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Pt too costly</text>
+              <!-- S2: Approach -->
+              <rect x="102" y="24" width="82" height="34" rx="2" fill="#E5DFD0" stroke="#A8A39A" stroke-width="0.5"/>
+              <text x="143" y="37" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">APPROACH</text>
+              <text x="143" y="49" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Graphene + Pt</text>
+              <text x="143" y="58" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">nanoparticles</text>
+              <!-- S3: Properties -->
+              <rect x="204" y="24" width="90" height="34" rx="2" fill="#E5DFD0" stroke="#A8A39A" stroke-width="0.5"/>
+              <text x="249" y="37" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">PROPERTIES</text>
+              <text x="249" y="49" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Corrosion resist.</text>
+              <text x="249" y="58" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">High SA · thermal cond.</text>
+              <!-- S4: Status -->
+              <rect x="314" y="24" width="116" height="34" rx="2" fill="#7A4500" fill-opacity="0.1" stroke="#7A4500" stroke-width="0.7"/>
+              <text x="372" y="37" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">STATUS</text>
+              <text x="372" y="49" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#7A4500">Structural defects —</text>
+              <text x="372" y="58" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#7A4500">ongoing research</text>
+              <!-- Arrows -->
+              <line x1="82"  y1="41" x2="100" y2="41" stroke="#A8A39A" stroke-width="0.6" marker-end="url(#arr-m)"/>
+              <line x1="184" y1="41" x2="202" y2="41" stroke="#A8A39A" stroke-width="0.6" marker-end="url(#arr-m)"/>
+              <line x1="294" y1="41" x2="312" y2="41" stroke="#7A4500" stroke-width="0.7" marker-end="url(#arr-a)"/>
+              <defs>
+                <marker id="arr-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#A8A39A"/>
+                </marker>
+                <marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#7A4500"/>
+                </marker>
+              </defs>
+            </g>
+            <text x="220" y="98" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.1em">GOAL: ELIMINATE OR DRASTICALLY REDUCE PLATINUM DEPENDENCY IN PEM FUEL CELLS</text>
+          </svg>
+          <div class="fig-cap">Fig. 04-B · Graphene-supported Pt nanoparticle catalyst research · QMUL &amp; UCL · commercialisation pending</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ PROJECT FOOTER ============ -->
+<div class="container">
+  <div class="project-footer">
+    <a href="05-bmw-excel-automation.html" class="pf-link">
+      <span class="pfk">&larr; Previous</span>
+      <span class="pfv">05 &middot; BMW Multi-Sheet Excel Automation</span>
+    </a>
+    <a href="index.html" class="pf-link">
+      <span class="pfk">Back &uarr;</span>
+      <span class="pfv">Index &middot; All projects</span>
+    </a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="container">© Omar Hathat &middot; 2026 &middot; Materials &amp; Sustainability &middot; UCL EMS522U</div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

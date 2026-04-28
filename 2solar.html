@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Deming Corridor Solar Farm · Omar Hathat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F2EB; --paper-dim:#EFEAE0; --paper-deep:#E5DFD0;
+    --ink:#1A1815; --ink-soft:#3D3A34; --ink-mute:#6B6862; --ink-faint:#A8A39A;
+    --accent:#3B6D11; --accent-bright:#5A9E1A; --accent-glow:#7AC23A;
+    --serif:'Fraunces','Times New Roman',serif;
+    --sans:'Inter','Helvetica Neue',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(245,242,235,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:0.5px solid var(--ink-faint);}
+  nav .inner{max-width:1180px;margin:0 auto;padding:1.1rem 2.5rem;display:flex;justify-content:space-between;align-items:center;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:0.05em;text-decoration:none;color:inherit;}
+  .logo svg{animation:spin 22s linear infinite;}
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .nav-links{display:flex;gap:2rem;font-size:13px;align-items:center;}
+  .nav-links a{color:var(--ink);text-decoration:none;transition:color 0.2s;}
+  .nav-links .home-back{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--ink-mute);}
+  .nav-links a:hover{color:var(--accent);}
+
+  /* LAYOUT */
+  .container{max-width:1180px;margin:0 auto;padding:0 2.5rem;}
+  section.s-block{padding:4rem 0 2.75rem;position:relative;}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:0.5px solid var(--ink-faint);padding-bottom:1rem;margin-bottom:2.25rem;flex-wrap:wrap;gap:8px;}
+  .section-head h2{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink);font-weight:500;}
+  .section-head .meta{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--ink-mute);}
+
+  /* HERO */
+  .hero{position:relative;padding:3.75rem 0 3.25rem;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;pointer-events:none;opacity:0.26;z-index:0;}
+  .hero .container{position:relative;z-index:2;}
+  .tag-pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;padding:7px 16px;border:0.5px solid var(--ink);border-radius:999px;color:var(--ink);margin-bottom:1.5rem;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:32px;margin-bottom:2rem;font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);}
+  h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.4vw,92px);line-height:0.96;letter-spacing:-0.025em;color:var(--ink);max-width:20ch;margin-bottom:2rem;}
+  h1.title em{font-style:italic;font-weight:400;color:var(--accent);}
+  p.summary{max-width:62ch;font-size:15.5px;line-height:1.7;color:var(--ink-soft);text-align:justify;hyphens:auto;margin-bottom:1rem;}
+  p.summary em{font-style:italic;font-family:var(--serif);font-size:17px;color:var(--ink);}
+  .btn-row{display:flex;gap:14px;margin-top:2.25rem;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:11px 22px;border:0.5px solid var(--ink);border-radius:999px;font-family:var(--sans);font-size:13px;color:var(--ink);text-decoration:none;transition:background .2s,color .2s;}
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.solid{background:var(--ink);color:var(--paper);}
+  .btn.solid:hover{background:var(--accent);border-color:var(--accent);}
+
+  /* TWO-COL */
+  .two-col{display:grid;grid-template-columns:1fr 1.05fr;gap:3.5rem;align-items:start;}
+
+  /* PROSE */
+  .prose p{font-size:14.5px;line-height:1.7;color:var(--ink-soft);text-align:justify;hyphens:auto;}
+  .prose p+p{margin-top:0.85rem;}
+  .prose em{font-style:italic;font-family:var(--serif);font-size:16px;color:var(--ink);}
+  .prose strong{color:var(--ink);font-weight:500;}
+
+  /* DATA CARD */
+  .data-card{background:var(--paper-dim);border-left:2px solid var(--accent);padding:1.4rem 1.6rem;margin-top:1.4rem;}
+  .data-card h4{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);font-weight:500;margin-bottom:0.9rem;}
+  .dl{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:8px;font-size:13px;}
+  .dl dt{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;white-space:nowrap;}
+  .dl dd{color:var(--ink);font-family:var(--serif);font-size:14px;}
+
+  /* SPEC STACK (§02) */
+  .spec-stack{display:flex;flex-direction:column;gap:1px;background:var(--ink-faint);}
+  .spec-card{background:var(--paper);padding:1.5rem 1.75rem;border-left:2px solid transparent;transition:border-color .25s;}
+  .spec-card:hover{border-left-color:var(--accent);background:var(--paper-dim);}
+  .sc-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .sc-title{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink);line-height:1.2;margin-bottom:14px;}
+
+  /* CHART PANEL */
+  .chart-panel{background:var(--paper-dim);border:0.5px solid var(--ink-faint);padding:1.5rem 1.25rem 1.25rem;}
+  .chart-panel h4{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase;font-weight:500;margin-bottom:1.25rem;}
+  .chart-panel svg{width:100%;height:auto;display:block;}
+
+  /* IMAGE FRAME */
+  .img-frame{background:var(--paper-dim);border:0.5px solid var(--ink-faint);position:relative;aspect-ratio:16/9;overflow:hidden;}
+  .img-frame::before,.img-frame::after{content:'';position:absolute;width:14px;height:14px;border:0.5px dashed var(--ink-faint);pointer-events:none;z-index:3;}
+  .img-frame::before{top:8px;left:8px;border-right:none;border-bottom:none;}
+  .img-frame::after{bottom:8px;right:8px;border-left:none;border-top:none;}
+  .img-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+  .img-frame .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-faint);text-align:center;padding:1.5rem;}
+
+  /* FIG PAIR (side by side images) */
+  .fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;}
+  .fig-cap{margin-top:0.75rem;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-mute);}
+
+  /* SVG FIGURE */
+  .fig-frame-svg{background:var(--paper-dim);border:0.5px solid var(--ink-faint);padding:1.5rem;}
+  .fig-frame-svg svg{width:100%;height:auto;display:block;}
+
+  /* IMPACT BAND */
+  .impact-band{background:var(--ink);color:var(--paper);padding:4rem 0 3.5rem;position:relative;overflow:hidden;}
+  .impact-band::before{content:"";position:absolute;inset:0;background-image:linear-gradient(to right,rgba(245,242,235,0.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(245,242,235,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+  .impact-band .container{position:relative;z-index:2;}
+  .impact-band .section-head{border-bottom-color:rgba(245,242,235,0.18);}
+  .impact-band .section-head h2{color:var(--paper);}
+  .impact-band .section-head .meta{color:rgba(245,242,235,0.55);}
+
+  /* LEDGER GRID */
+  .ledger-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:0.5px solid rgba(245,242,235,0.18);border-bottom:0.5px solid rgba(245,242,235,0.18);}
+  .ledger-grid>div{padding:1.6rem 1.5rem 1.6rem 0;border-right:0.5px solid rgba(245,242,235,0.18);}
+  .ledger-grid>div:last-child{border-right:none;padding-right:0;}
+  .ledger-grid>div+div{padding-left:1.75rem;}
+  .lk{font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,242,235,0.55);margin-bottom:0.6rem;}
+  .lv{font-family:var(--serif);font-size:54px;font-weight:300;line-height:1;color:var(--paper);letter-spacing:-0.02em;}
+  .lv .unit{font-family:var(--mono);font-size:13px;color:var(--accent-glow);letter-spacing:0.1em;margin-left:6px;}
+  .ld{margin-top:0.9rem;font-size:13px;color:rgba(245,242,235,0.7);line-height:1.55;}
+
+  /* PULL QUOTE */
+  .pull-quote{margin-top:2.25rem;font-family:var(--serif);font-style:italic;font-weight:300;font-size:20px;line-height:1.45;color:rgba(245,242,235,0.85);max-width:64ch;}
+  .pull-quote .qmark{font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:0.18em;color:var(--accent-glow);margin-right:14px;vertical-align:middle;}
+
+  /* PROJECT FOOTER */
+  .project-footer{border-top:0.5px solid var(--ink-faint);padding:2.5rem 0 5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .pf-link{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;transition:color .2s;}
+  .pf-link:hover{color:var(--accent);}
+  .pf-link .pfk{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase;}
+  .pf-link .pfv{font-family:var(--serif);font-style:italic;font-size:18px;}
+
+  footer.site{border-top:0.5px solid var(--ink-faint);padding:1.6rem 0;font-family:var(--mono);font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-mute);text-align:center;}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* RESPONSIVE */
+  @media(max-width:960px){
+    .two-col,.fig-pair{grid-template-columns:1fr;gap:2rem;}
+    .ledger-grid{grid-template-columns:1fr;}
+    .ledger-grid>div{border-right:none;border-bottom:0.5px solid rgba(245,242,235,0.18);padding:1.4rem 0!important;}
+    .ledger-grid>div:last-child{border-bottom:none;}
+  }
+  @media(max-width:560px){.container{padding:0 22px;}nav .inner{padding:14px 22px;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <a href="index.html#top" class="logo">
+      <svg width="22" height="22" viewBox="-22 -22 44 44">
+        <g>
+          <circle cx="0" cy="0" r="14" fill="none" stroke="#1A1815" stroke-width="0.8"/>
+          <circle cx="0" cy="0" r="6"  fill="none" stroke="#1A1815" stroke-width="0.8"/>
+          <g stroke="#1A1815" stroke-width="0.8" fill="none">
+            <line x1="0" y1="-18" x2="0" y2="-14"/><line x1="0" y1="14" x2="0" y2="18"/>
+            <line x1="-18" y1="0" x2="-14" y2="0"/><line x1="14" y1="0" x2="18" y2="0"/>
+            <g transform="rotate(45)">
+              <line x1="0" y1="-18" x2="0" y2="-14"/><line x1="0" y1="14" x2="0" y2="18"/>
+              <line x1="-18" y1="0" x2="-14" y2="0"/><line x1="14" y1="0" x2="18" y2="0"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span>ABOUT.ME</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#domains">Domains</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html" class="home-back">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <!-- Hero SVG: Solar array site plan — top-down engineering layout view -->
+  <svg class="hero-bg" viewBox="0 0 1280 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <pattern id="dot-h2" width="40" height="40" patternUnits="userSpaceOnUse">
+        <circle cx="20" cy="20" r="0.8" fill="#1A1815" opacity="0.18"/>
+      </pattern>
+    </defs>
+    <rect width="1280" height="560" fill="url(#dot-h2)"/>
+
+    <!-- Blueprint frame -->
+    <rect x="718" y="38" width="532" height="498" fill="none" stroke="#1A1815" stroke-width="0.5" stroke-dasharray="5 4" opacity="0.27"/>
+    <g stroke="#1A1815" stroke-width="1" opacity="0.28">
+      <line x1="712" y1="38" x2="726" y2="38"/><line x1="718" y1="32" x2="718" y2="46"/>
+      <line x1="1242" y1="38" x2="1256" y2="38"/><line x1="1250" y1="32" x2="1250" y2="46"/>
+      <line x1="712" y1="536" x2="726" y2="536"/><line x1="718" y1="530" x2="718" y2="542"/>
+      <line x1="1242" y1="536" x2="1256" y2="536"/><line x1="1250" y1="530" x2="1250" y2="542"/>
+    </g>
+
+    <!-- Outer array boundary -->
+    <rect x="734" y="55" width="490" height="450" fill="none" stroke="#3B6D11" stroke-width="0.8" stroke-dasharray="6 4" opacity="0.45"/>
+
+    <!-- 10 solar panel columns: each 34px wide, 14px gap = 48px per col -->
+    <!-- col starts: 742, 790, 838, 886, 934, 982, 1030, 1078, 1126, 1174 -->
+    <g fill="#EFEAE0" stroke="#3B6D11" stroke-width="0.7" opacity="0.55">
+      <rect x="742" y="60" width="34" height="440"/>
+      <rect x="790" y="60" width="34" height="440"/>
+      <rect x="838" y="60" width="34" height="440"/>
+      <rect x="886" y="60" width="34" height="440"/>
+      <rect x="934" y="60" width="34" height="440"/>
+      <rect x="982" y="60" width="34" height="440"/>
+      <rect x="1030" y="60" width="34" height="440"/>
+      <rect x="1078" y="60" width="34" height="440"/>
+      <rect x="1126" y="60" width="34" height="440"/>
+      <rect x="1174" y="60" width="34" height="440"/>
+    </g>
+
+    <!-- Row lines within columns (every 12px = 1 panel row group) -->
+    <g stroke="#3B6D11" stroke-width="0.25" opacity="0.65">
+      <line x1="742" y1="72" x2="1208" y2="72"/><line x1="742" y1="84" x2="1208" y2="84"/>
+      <line x1="742" y1="96" x2="1208" y2="96"/><line x1="742" y1="108" x2="1208" y2="108"/>
+      <line x1="742" y1="120" x2="1208" y2="120"/><line x1="742" y1="132" x2="1208" y2="132"/>
+      <line x1="742" y1="144" x2="1208" y2="144"/><line x1="742" y1="156" x2="1208" y2="156"/>
+      <line x1="742" y1="168" x2="1208" y2="168"/><line x1="742" y1="180" x2="1208" y2="180"/>
+      <line x1="742" y1="192" x2="1208" y2="192"/><line x1="742" y1="204" x2="1208" y2="204"/>
+      <line x1="742" y1="216" x2="1208" y2="216"/><line x1="742" y1="228" x2="1208" y2="228"/>
+      <line x1="742" y1="240" x2="1208" y2="240"/><line x1="742" y1="252" x2="1208" y2="252"/>
+      <line x1="742" y1="264" x2="1208" y2="264"/><line x1="742" y1="276" x2="1208" y2="276"/>
+      <line x1="742" y1="288" x2="1208" y2="288"/><line x1="742" y1="300" x2="1208" y2="300"/>
+      <line x1="742" y1="312" x2="1208" y2="312"/><line x1="742" y1="324" x2="1208" y2="324"/>
+      <line x1="742" y1="336" x2="1208" y2="336"/><line x1="742" y1="348" x2="1208" y2="348"/>
+      <line x1="742" y1="360" x2="1208" y2="360"/><line x1="742" y1="372" x2="1208" y2="372"/>
+      <line x1="742" y1="384" x2="1208" y2="384"/><line x1="742" y1="396" x2="1208" y2="396"/>
+      <line x1="742" y1="408" x2="1208" y2="408"/><line x1="742" y1="420" x2="1208" y2="420"/>
+      <line x1="742" y1="432" x2="1208" y2="432"/><line x1="742" y1="444" x2="1208" y2="444"/>
+      <line x1="742" y1="456" x2="1208" y2="456"/><line x1="742" y1="468" x2="1208" y2="468"/>
+      <line x1="742" y1="480" x2="1208" y2="480"/><line x1="742" y1="492" x2="1208" y2="492"/>
+    </g>
+
+    <!-- Substation -->
+    <rect x="748" y="510" width="22" height="14" fill="none" stroke="#3B6D11" stroke-width="0.9" opacity="0.7"/>
+    <text x="759" y="521" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#3B6D11" opacity="0.7" letter-spacing="0.06em">SUB.</text>
+    <!-- Transmission line dashed -->
+    <line x1="759" y1="524" x2="759" y2="545" stroke="#3B6D11" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+    <text x="768" y="542" font-family="ui-monospace,monospace" font-size="7" fill="#3B6D11" opacity="0.5" letter-spacing="0.06em">15.46 KM → LUNA ENERGY FAC.</text>
+
+    <!-- North arrow (top right of frame) -->
+    <g transform="translate(1238,80)" opacity="0.38">
+      <circle cx="0" cy="0" r="14" fill="none" stroke="#1A1815" stroke-width="0.5"/>
+      <line x1="0" y1="-14" x2="0" y2="14" stroke="#1A1815" stroke-width="0.5"/>
+      <line x1="-14" y1="0" x2="14" y2="0" stroke="#1A1815" stroke-width="0.5"/>
+      <polygon points="0,-6 -3,0 3,0" fill="#1A1815" opacity="0.7"/>
+    </g>
+    <text x="1238" y="100" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8" fill="#1A1815" opacity="0.38" letter-spacing="0.08em">N</text>
+
+    <!-- Dimension labels -->
+    <text x="979" y="50" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8" fill="#1A1815" opacity="0.4" letter-spacing="0.1em">2,134 M</text>
+    <text x="730" y="285" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8" fill="#1A1815" opacity="0.4" letter-spacing="0.1em" transform="rotate(-90 730 285)">600 M</text>
+
+    <!-- Column count label -->
+    <text x="979" y="522" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862" opacity="0.5" letter-spacing="0.1em">10 COLUMNS · 150 ROWS · 4.0 M SPACING</text>
+
+    <!-- Site annotation -->
+    <text x="1238" y="295" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815" opacity="0.28" letter-spacing="0.1em" transform="rotate(90 1238 295)">LUNA COUNTY · NEW MEXICO · 32°09′N 107°57′W</text>
+
+    <!-- GHI annotation -->
+    <text x="1238" y="430" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#3B6D11" opacity="0.4" letter-spacing="0.1em" transform="rotate(90 1238 430)">GHI 7.50 kWh/m²/day · ELEV. 1,317 m</text>
+
+    <!-- Decorative crosshair -->
+    <g transform="translate(1238,490)" opacity="0.28">
+      <circle cx="0" cy="0" r="12" fill="none" stroke="#1A1815" stroke-width="0.5"/>
+      <line x1="0" y1="-12" x2="0" y2="12" stroke="#1A1815" stroke-width="0.4"/>
+      <line x1="-12" y1="0" x2="12" y2="0" stroke="#1A1815" stroke-width="0.4"/>
+      <circle cx="0" cy="0" r="3" fill="none" stroke="#1A1815" stroke-width="0.4"/>
+    </g>
+  </svg>
+
+  <div class="container">
+    <span class="tag-pill reveal">02 / Renewable Energy</span>
+
+    <div class="meta-row reveal">
+      <span>UCL</span>
+      <span>MECH0032</span>
+      <span>New Mexico · USA</span>
+      <span>2025 · Solo Study</span>
+    </div>
+
+    <h1 class="title reveal">Deming Corridor<br><em>Solar Farm.</em></h1>
+
+    <p class="summary reveal">
+      A comprehensive outline design study for a <em>250 GWh/year</em> utility-scale photovoltaic facility in south-western New Mexico — covering site selection via GIS analysis, system specification, intermittency management, environmental impact, and full CAPEX/OPEX financial modelling.
+    </p>
+    <p class="summary reveal">
+      The farm deploys <em>328,948 Heliene 72M monocrystalline modules</em> on fixed-tilt racking across 1.74 km², positioned near existing high-voltage infrastructure to minimise grid connection costs while maximising output under New Mexico's 7.50 kWh/m² daily irradiance.
+    </p>
+
+    <div class="btn-row reveal">
+      <a href="index.html#work" class="btn solid">Other projects &rarr;</a>
+      <a href="index.html#contact" class="btn">Get in touch &darr;</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- § 01 / SITE SELECTION -->
+<section class="s-block" id="site">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 01 / Site Selection</h2>
+      <span class="meta">32°09′07″N, 107°57′11″W · Luna County</span>
+    </div>
+
+    <div class="two-col">
+      <div class="prose reveal">
+        <p>Site selection combined <em>RE-Powering Mapper 3.0</em> with Google Earth to identify a rectangular plot in Luna County, New Mexico, NW of Gage and east of Sunshine. The region receives <em>7.50 kWh/m² daily</em> at an elevation of 1,317 m, with terrain slope below 2%, eliminating land grading. Sandy and loamy soil composition further reduces civil engineering costs.</p>
+        <p>Proximity to high-voltage infrastructure was a primary criterion. The <em>Luna Energy Facility (650 MW)</em> sits 15.46 km away; the <em>Pyramid Generating Station (186 MW)</em> is 7.60 km distant. Both allow shorter transmission line installations, directly reducing grid connection CAPEX. The mapped high-voltage network, sourced via Open Infrastructure Map, provides direct access to New Mexico's energy grid.</p>
+        <p>The farm's final adjusted area of <em>1.74 km²</em> incorporates a 35% buffer zone for drainage, security fencing, and future expansion — structured into 10 columns of 150 rows each, with 15-metre buffer paths between columns for maintenance access.</p>
+
+        <div class="data-card">
+          <h4>§ Site Parameters</h4>
+          <dl class="dl">
+            <dt>Coordinates</dt>   <dd>32°09′07″N, 107°57′11″W</dd>
+            <dt>Elevation</dt>     <dd>1,317 m ASL · slope &lt; 2%</dd>
+            <dt>Daily Irradiance</dt><dd>7.50 kWh/m² · NREL PVWatts validated</dd>
+            <dt>Final Area</dt>    <dd>1.74 km² incl. 35% buffer zone</dd>
+            <dt>Luna Energy Fac.</dt><dd>15.46 km · 650 MW capacity</dd>
+            <dt>Pyramid Gen. Stn.</dt><dd>7.60 km · 186 MW capacity</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="chart-panel">
+          <h4>Array Layout Schematic · 10 Columns × 150 Rows</h4>
+          <svg viewBox="0 0 340 420">
+            <rect x="10" y="10" width="320" height="360" fill="none" stroke="#3B6D11" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+            <text x="170" y="7" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.1em">2,134 M</text>
+            <text x="5" y="195" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.1em" transform="rotate(-90 5 195)">600 M</text>
+            <g fill="#EFEAE0" stroke="#3B6D11" stroke-width="0.6">
+              <rect x="18" y="18" width="22" height="344"/><rect x="48"  y="18" width="22" height="344"/>
+              <rect x="78" y="18" width="22" height="344"/><rect x="108" y="18" width="22" height="344"/>
+              <rect x="138" y="18" width="22" height="344"/><rect x="168" y="18" width="22" height="344"/>
+              <rect x="198" y="18" width="22" height="344"/><rect x="228" y="18" width="22" height="344"/>
+              <rect x="258" y="18" width="22" height="344"/><rect x="288" y="18" width="22" height="344"/>
+            </g>
+            <g stroke="#3B6D11" stroke-width="0.25" opacity="0.55">
+              <line x1="18" y1="30" x2="310" y2="30"/><line x1="18" y1="52" x2="310" y2="52"/>
+              <line x1="18" y1="74" x2="310" y2="74"/><line x1="18" y1="96" x2="310" y2="96"/>
+              <line x1="18" y1="118" x2="310" y2="118"/><line x1="18" y1="140" x2="310" y2="140"/>
+              <line x1="18" y1="162" x2="310" y2="162"/><line x1="18" y1="184" x2="310" y2="184"/>
+              <line x1="18" y1="206" x2="310" y2="206"/><line x1="18" y1="228" x2="310" y2="228"/>
+              <line x1="18" y1="250" x2="310" y2="250"/><line x1="18" y1="272" x2="310" y2="272"/>
+              <line x1="18" y1="294" x2="310" y2="294"/><line x1="18" y1="316" x2="310" y2="316"/>
+              <line x1="18" y1="338" x2="310" y2="338"/>
+            </g>
+            <!-- Substation -->
+            <rect x="120" y="370" width="30" height="16" fill="none" stroke="#3B6D11" stroke-width="0.8" opacity="0.7"/>
+            <text x="135" y="381" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#3B6D11" opacity="0.7" letter-spacing="0.06em">SUB.</text>
+            <line x1="135" y1="386" x2="135" y2="400" stroke="#3B6D11" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>
+            <text x="145" y="398" font-family="ui-monospace,monospace" font-size="6" fill="#6B6862" opacity="0.7" letter-spacing="0.06em">→ LUNA 15.46 KM</text>
+            <text x="170" y="415" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.1em">10 COLUMNS · 150 ROWS · 4.0 M SPACING</text>
+            <!-- North arrow -->
+            <g transform="translate(320 30)" stroke="#6B6862" stroke-width="0.7" fill="none">
+              <line x1="0" y1="12" x2="0" y2="-2"/>
+              <polygon points="0,-6 -3,2 3,2" fill="#6B6862"/>
+              <text x="0" y="20" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">N</text>
+            </g>
+          </svg>
+          <div class="fig-cap" style="margin-top:.75rem;">Site layout schematic · Fixed-tilt array · 4.0 m row pitch</div>
+        </div>
+
+        <div class="fig-pair">
+          <div>
+            <div class="img-frame">
+              <img src="fig-a-site-area.png" alt="Aerial view of site area" onerror="this.style.display='none'">
+              <div class="ph">Fig. A · Initial area plan<br>1.78 km² · Google Earth</div>
+            </div>
+            <div class="fig-cap">Fig. A · Initial area plan · 1.78 km²</div>
+          </div>
+          <div>
+            <div class="img-frame">
+              <img src="fig-b-grid-proximity.png" alt="Grid proximity map" onerror="this.style.display='none'">
+              <div class="ph">Fig. B · Grid proximity<br>Open Infrastructure Map</div>
+            </div>
+            <div class="fig-cap">Fig. B · Grid proximity · HV transmission</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- § 02 / SYSTEM DESIGN -->
+<section class="s-block" id="system">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 02 / System Design</h2>
+      <span class="meta">328,948 modules · 125 inverters · 25 transformers</span>
+    </div>
+
+    <div class="two-col">
+      <div class="spec-stack reveal">
+        <div class="spec-card">
+          <div class="sc-tag">Module</div>
+          <div class="sc-title">Heliene 72M Series</div>
+          <dl class="dl">
+            <dt>Count</dt>       <dd>328,948 modules</dd>
+            <dt>Peak Power</dt>  <dd>370 W (STC)</dd>
+            <dt>Efficiency</dt>  <dd>19.30 %</dd>
+            <dt>Temp. Coeff.</dt><dd>−0.39 %/°C (P<sub>max</sub>)</dd>
+            <dt>Tilt Angle</dt>  <dd>32° optimal · 56° winter (biannual)</dd>
+            <dt>Warranty</dt>    <dd>25-yr linear power · 80% min. at yr 25</dd>
+          </dl>
+        </div>
+        <div class="spec-card">
+          <div class="sc-tag">Inverter</div>
+          <div class="sc-title">SMA Sunny Central 2500-EV-US</div>
+          <dl class="dl">
+            <dt>Count</dt>          <dd>125 units</dd>
+            <dt>Peak Efficiency</dt><dd>98.80 %</dd>
+            <dt>Max DC Input</dt>   <dd>1,500 V DC</dd>
+            <dt>DC/AC Ratio</dt>    <dd>1.4 · up to 250%</dd>
+            <dt>Compliance</dt>     <dd>IEEE 1547 · UL 1741 SA · UL 62109</dd>
+          </dl>
+        </div>
+        <div class="spec-card">
+          <div class="sc-tag">Transformer</div>
+          <div class="sc-title">ABB 2500 kVA Solar</div>
+          <dl class="dl">
+            <dt>Count</dt>         <dd>25 units</dd>
+            <dt>Efficiency</dt>    <dd>≥ 98.50 %</dd>
+            <dt>Power Rating</dt>  <dd>2,500 kVA</dd>
+            <dt>Compliance</dt>    <dd>IEEE C57.12.00 · IEEE C57.91</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="chart-panel">
+          <h4>Monthly AC Energy · Single Module (kWh) · Biannual Tilt Strategy</h4>
+          <svg viewBox="0 0 300 200">
+            <g stroke="#EDE9DF" stroke-width="0.5">
+              <line x1="30" y1="20" x2="290" y2="20"/><line x1="30" y1="50" x2="290" y2="50"/>
+              <line x1="30" y1="80" x2="290" y2="80"/><line x1="30" y1="110" x2="290" y2="110"/>
+              <line x1="30" y1="140" x2="290" y2="140"/><line x1="30" y1="165" x2="290" y2="165"/>
+            </g>
+            <g font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" text-anchor="end">
+              <text x="26" y="23">120</text><text x="26" y="53">90</text>
+              <text x="26" y="83">60</text><text x="26" y="113">30</text>
+            </g>
+            <text x="8" y="100" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" transform="rotate(-90 8 100)">kWh</text>
+            <!-- Winter tilt bars -->
+            <rect x="33"  y="110.6" width="16" height="54.4" fill="#3B6D11" opacity="0.38"/>
+            <rect x="53"  y="102.2" width="16" height="62.8" fill="#3B6D11" opacity="0.38"/>
+            <rect x="73"  y="92.5"  width="16" height="72.5" fill="#3B6D11" opacity="0.38"/>
+            <!-- Optimal tilt bars -->
+            <rect x="93"  y="78"    width="16" height="87"   fill="#3B6D11" opacity="0.85"/>
+            <rect x="113" y="66"    width="16" height="99"   fill="#3B6D11" opacity="0.85"/>
+            <rect x="133" y="58.7"  width="16" height="106.3" fill="#3B6D11" opacity="0.85"/>
+            <rect x="153" y="56.2"  width="16" height="108.8" fill="#3B6D11" opacity="0.85"/>
+            <rect x="173" y="62.3"  width="16" height="102.7" fill="#3B6D11" opacity="0.85"/>
+            <rect x="193" y="75.6"  width="16" height="89.4" fill="#3B6D11" opacity="0.85"/>
+            <!-- Winter tilt bars (Oct–Dec) -->
+            <rect x="213" y="90.1"  width="16" height="74.9" fill="#3B6D11" opacity="0.38"/>
+            <rect x="233" y="104.6" width="16" height="60.4" fill="#3B6D11" opacity="0.38"/>
+            <rect x="253" y="114.2" width="16" height="50.8" fill="#3B6D11" opacity="0.38"/>
+            <g font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862" text-anchor="middle">
+              <text x="41" y="177">J</text><text x="61" y="177">F</text><text x="81" y="177">M</text>
+              <text x="101" y="177">A</text><text x="121" y="177">M</text><text x="141" y="177">J</text>
+              <text x="161" y="177">J</text><text x="181" y="177">A</text><text x="201" y="177">S</text>
+              <text x="221" y="177">O</text><text x="241" y="177">N</text><text x="261" y="177">D</text>
+            </g>
+            <rect x="33" y="187" width="10" height="6" fill="#3B6D11" opacity="0.38"/>
+            <text x="46" y="193" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">WINTER TILT 56°</text>
+            <rect x="130" y="187" width="10" height="6" fill="#3B6D11" opacity="0.85"/>
+            <text x="143" y="193" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">OPTIMAL TILT 32°</text>
+            <text x="290" y="30" text-anchor="end" font-family="ui-monospace,monospace" font-size="7" fill="#3B6D11" letter-spacing="0.06em">774 kWh/yr</text>
+            <text x="290" y="40" text-anchor="end" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">biannual tilt</text>
+          </svg>
+        </div>
+        <div class="data-card">
+          <h4>Degradation Model</h4>
+          <dl class="dl">
+            <dt>Annual Rate</dt>  <dd>0.89% over 25 years</dd>
+            <dt>Guarantee</dt>   <dd>80% minimum output at year 25</dd>
+            <dt>Min. Modules</dt><dd>352,113 at year-25 degraded output</dd>
+            <dt>Output/Module</dt><dd>0.000631 GWh at 25-year minimum</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- DARK BAND — § 03 / ENVIRONMENTAL IMPACT -->
+<section class="impact-band" id="environment">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 03 / Environmental Impact</h2>
+      <span class="meta">25-year operational horizon</span>
+    </div>
+
+    <div class="ledger-grid reveal">
+      <div>
+        <div class="lk">Annual CO₂ Offset</div>
+        <div class="lv">212,500<span class="unit">tCO₂e</span></div>
+        <div class="ld">Each MWh offsets approximately 0.85 t CO₂ relative to coal-fired generation, accelerating New Mexico's 2045 carbon-neutrality target.</div>
+      </div>
+      <div>
+        <div class="lk">Lifetime CO₂ Reduction</div>
+        <div class="lv">5.31<span class="unit">M t</span></div>
+        <div class="ld">Total carbon reduction over 25 years. Equivalent to eliminating a significant fraction of the now-closed San Juan Generating Station's annual 12 Mt/yr.</div>
+      </div>
+      <div>
+        <div class="lk">Annual Energy Output</div>
+        <div class="lv">250<span class="unit">GWh/yr</span></div>
+        <div class="ld">Validated via NREL PVWatts with site irradiance, 14.08% system losses, and biannual tilt adjustment yielding 774 kWh per module annually.</div>
+      </div>
+    </div>
+
+    <p class="pull-quote reveal">
+      <span class="qmark">⏵ NM ETA 2019</span>By displacing fossil-fuel generation, the farm contributes to price stability, energy security, and rural employment — aligned with New Mexico's mandate of 50% clean energy by 2030 and 100% carbon-zero by 2045.
+    </p>
+  </div>
+</section>
+
+
+<!-- § 04 / FINANCIAL MODEL -->
+<section class="s-block" id="finance">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 04 / Financial Model</h2>
+      <span class="meta">15-year operational horizon · LCOE 0.0218 GBP/kWh</span>
+    </div>
+
+    <div class="two-col">
+      <div class="reveal">
+        <div class="prose">
+          <p>Total CAPEX of <em>£276.55 million</em> reflects detailed cost integration across land acquisition, grid connection (£8.45 million for 15.5 km HV transmission), substation and legal fees, and full mechanical and electrical installation. The dominant cost driver is installation at <em>£217.25 million</em>, priced at 0.604 GBP/W using ENVERUS regional templates for the U.S. Southwest.</p>
+          <p>Module procurement totals <em>£48.92 million</em> for 328,948 Heliene units at £148.73 per module. The 125 inverters and 25 transformers contribute a combined £773,075 — a modest share given their critical role in system efficiency.</p>
+          <p>Over 15 years, OPEX totals <em>£29.63 million</em>, equating to 0.0218 GBP/kWh. Against typical fossil fuel LCOEs exceeding £0.04/kWh, the farm delivers both cost stability and regulatory compliance with the Energy Transition Act.</p>
+          <p>The decision to use <em>fixed-tilt racking</em> over two-axis tracking was financially driven: tracking systems cost $600–$1,000 per panel for a maximum 90 W boost per module. On New Mexico's abundant, affordable land, deploying additional fixed-tilt modules is demonstrably more economical.</p>
+        </div>
+
+        <div class="chart-panel" style="margin-top:1.75rem;">
+          <h4>CAPEX Breakdown · £276.55 M Total</h4>
+          <svg viewBox="0 0 300 160">
+            <g font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862" text-anchor="end">
+              <text x="88" y="28">INSTALLATION</text>
+              <text x="88" y="58">MODULES</text>
+              <text x="88" y="88">GRID CONNECTION</text>
+              <text x="88" y="118">LAND + OTHER</text>
+            </g>
+            <rect x="92" y="18" width="196" height="14" fill="#3B6D11" opacity="0.85"/>
+            <rect x="92" y="48" width="44"  height="14" fill="#3B6D11" opacity="0.65"/>
+            <rect x="92" y="78" width="8"   height="14" fill="#3B6D11" opacity="0.45"/>
+            <rect x="92" y="108" width="4"  height="14" fill="#3B6D11" opacity="0.3"/>
+            <g font-family="ui-monospace,monospace" font-size="7.5" fill="#3D3A34">
+              <text x="292" y="28">£217.25M</text>
+              <text x="140" y="62">£48.92M</text>
+              <text x="104" y="92">£8.45M</text>
+              <text x="100" y="122">£1.85M</text>
+            </g>
+            <line x1="92" y1="15" x2="92" y2="130" stroke="#EDE9DF" stroke-width="0.5"/>
+            <line x1="92" y1="130" x2="295" y2="130" stroke="#EDE9DF" stroke-width="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="data-card">
+          <h4>Financial Summary</h4>
+          <dl class="dl">
+            <dt>Total CAPEX</dt>      <dd>£276.55 M</dd>
+            <dt>OPEX (15 yr)</dt>     <dd>£29.63 M</dd>
+            <dt>LCOE</dt>             <dd>0.0218 GBP/kWh</dd>
+            <dt>O&amp;M Rate</dt>     <dd>$7.90/kW/year</dd>
+            <dt>Land</dt>             <dd>430 acres · £525/acre</dd>
+            <dt>Grid Connection</dt>  <dd>£8.45 M · 15.5 km HV line</dd>
+            <dt>Installation</dt>     <dd>0.604 GBP/W · ENVERUS template</dd>
+            <dt>Modules</dt>          <dd>£148.73/unit · bulk order</dd>
+            <dt>Fossil LCOE Ref.</dt> <dd>&gt; £0.04/kWh · solar is competitive</dd>
+          </dl>
+        </div>
+        <div class="data-card">
+          <h4>Policy Alignment</h4>
+          <dl class="dl">
+            <dt>NM ETA 2019</dt>   <dd>50% clean energy by 2030 · 100% carbon-zero by 2045</dd>
+            <dt>IRA 2022</dt>       <dd>Potential federal tax incentive eligibility</dd>
+            <dt>Benchmark</dt>     <dd>LCOE below fossil threshold of £0.04/kWh</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- § 05 / INTERMITTENCY & GRID -->
+<section class="s-block" id="intermittency" style="padding-bottom:4rem;">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 05 / Intermittency &amp; Grid Integration</h2>
+      <span class="meta">Storage · dispatch · demand-side</span>
+    </div>
+
+    <div class="two-col">
+      <div class="prose reveal">
+        <p>Intermittency is addressed through a layered storage and demand-side strategy. A <em>500 MWh lithium-ion BESS</em> — 129 Tesla Megapack units or 67 Fluence Grid-Stack units — with 125 MW discharge capacity over a 4-hour duration stores excess daytime generation and dispatches at night, achieving 90%+ round-trip efficiency. This prevents curtailment and enhances grid frequency stability.</p>
+        <p>For seasonal storage, <em>Elephant Butte Reservoir</em> is identified as a candidate for retrofitting into a 2 GWh pumped hydro system with a 500 MW turbine, providing 10+ hours of backup power during prolonged low-irradiance periods. The Hornsdale Power Reserve in South Australia serves as a validated precedent for BESS effectiveness at grid scale.</p>
+        <p>Demand-side optimisation uses a <em>midday tariff of $0.03/kWh</em>, mirroring Arizona's pricing structure, to shift industrial loads toward peak solar hours. HVDC transmission enables long-distance export with 40% lower losses than AC lines, extending the farm's effective service area beyond Luna County.</p>
+      </div>
+
+      <div class="reveal">
+        <div class="data-card">
+          <h4>Storage Configuration</h4>
+          <dl class="dl">
+            <dt>Short-term BESS</dt>  <dd>500 MWh Li-ion · 125 MW · 4-hr duration · 90%+ efficiency</dd>
+            <dt>Configuration</dt>   <dd>129 Tesla Megapack or 67 Fluence Grid-Stack units</dd>
+            <dt>Seasonal Hydro</dt>  <dd>2 GWh · Elephant Butte Reservoir · 500 MW · 10+ hr backup</dd>
+            <dt>Demand-Side</dt>     <dd>Midday tariff $0.03/kWh · industrial load shifting</dd>
+            <dt>Transmission</dt>    <dd>HVDC · 40% lower losses vs. AC for long-distance export</dd>
+            <dt>Precedent</dt>       <dd>El Hierro (Spain) · 100% renewable 24 consecutive days</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PROJECT FOOTER -->
+<div class="container">
+  <div class="project-footer">
+    <a href="01-h2-ldi-combustion.html" class="pf-link">
+      <span class="pfk">← Previous</span>
+      <span class="pfv">01 · Lean Direct Injection</span>
+    </a>
+    <a href="03-heathrow-water-blueprint.html" class="pf-link">
+      <span class="pfk">Next →</span>
+      <span class="pfv">03 · Heathrow Net-Zero Water Blueprint</span>
+    </a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="container">© Omar Hathat · 2026 · Renewable Energy · UCL MECH0032</div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BMW Multi-Sheet Excel Automation · Omar Hathat</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F5F2EB;
+    --paper-dim:#EFEAE0;
+    --paper-deep:#E5DFD0;
+    --ink:#1A1815;
+    --ink-soft:#3D3A34;
+    --ink-mute:#6B6862;
+    --ink-faint:#A8A39A;
+    --accent:#1B3F82;          /* BMW deep navy */
+    --accent-bright:#1C69D4;
+    --accent-glow:#5094D8;
+    --serif:'Fraunces','Times New Roman',serif;
+    --sans:'Inter','Helvetica Neue',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(245,242,235,0.92);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:0.5px solid var(--ink-faint);
+  }
+  nav .inner{
+    max-width:1180px;margin:0 auto;
+    padding:1.1rem 2.5rem;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.05em;
+    text-decoration:none;color:inherit;
+  }
+  .logo svg{animation:spin 22s linear infinite;}
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .nav-links{display:flex;gap:2rem;font-size:13px;align-items:center;}
+  .nav-links a{color:var(--ink);text-decoration:none;transition:color 0.2s;font-size:13px;}
+  .nav-links .home-back{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--ink-mute);}
+  .nav-links a:hover{color:var(--accent);}
+
+  /* ===== LAYOUT ===== */
+  .container{max-width:1180px;margin:0 auto;padding:0 2.5rem;}
+  section.s-block{padding:4rem 0 2.75rem;position:relative;}
+
+  .section-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:0.5px solid var(--ink-faint);
+    padding-bottom:1rem;margin-bottom:2.25rem;
+    flex-wrap:wrap;gap:8px;
+  }
+  .section-head h2{
+    font-family:var(--mono);font-size:11px;
+    letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--ink);font-weight:500;
+  }
+  .section-head .meta{
+    font-family:var(--serif);font-style:italic;
+    font-size:14.5px;color:var(--ink-mute);
+  }
+
+  /* ===== HERO ===== */
+  .hero{position:relative;padding:3.75rem 0 3.25rem;overflow:hidden;}
+  .hero-bg{
+    position:absolute;inset:0;pointer-events:none;
+    opacity:0.26;z-index:0;
+  }
+  .hero .container{position:relative;z-index:2;}
+
+  .tag-pill{
+    display:inline-block;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:0.22em;text-transform:uppercase;
+    padding:7px 16px;border:0.5px solid var(--ink);border-radius:999px;
+    color:var(--ink);margin-bottom:1.5rem;
+  }
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:32px;margin-bottom:2rem;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-mute);
+  }
+  h1.title{
+    font-family:var(--serif);font-weight:300;
+    font-size:clamp(46px,6.4vw,92px);line-height:0.96;
+    letter-spacing:-0.025em;color:var(--ink);max-width:18ch;
+    margin-bottom:2rem;
+  }
+  h1.title em{font-style:italic;font-weight:400;color:var(--accent);}
+
+  p.summary{
+    max-width:62ch;font-size:15.5px;line-height:1.7;
+    color:var(--ink-soft);text-align:justify;hyphens:auto;
+    margin-bottom:1rem;
+  }
+  p.summary em{font-style:italic;font-family:var(--serif);font-size:17px;color:var(--ink);}
+
+  .btn-row{display:flex;gap:14px;margin-top:2.25rem;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:11px 22px;border:0.5px solid var(--ink);border-radius:999px;
+    font-family:var(--sans);font-size:13px;color:var(--ink);
+    text-decoration:none;transition:background .2s,color .2s;
+  }
+  .btn:hover{background:var(--ink);color:var(--paper);}
+  .btn.solid{background:var(--ink);color:var(--paper);}
+  .btn.solid:hover{background:var(--accent);border-color:var(--accent);}
+
+  /* ===== SHEET MAP ===== */
+  .sheet-map{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:0;
+    border:0.5px solid var(--ink-faint);
+  }
+  .sheet-tab{
+    padding:1.25rem 1rem 1rem;
+    border-right:0.5px solid var(--ink-faint);
+    background:var(--paper-dim);
+  }
+  .sheet-tab:last-child{border-right:none;}
+  .sheet-tab.accent-tab{border-top:2px solid var(--accent);}
+  .sheet-tab.neutral{background:var(--paper-deep);}
+  .st-num{
+    font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+    color:var(--ink-mute);text-transform:uppercase;margin-bottom:0.5rem;
+  }
+  .st-name{
+    font-family:var(--serif);font-size:13px;color:var(--ink);
+    font-style:italic;line-height:1.2;margin-bottom:0.4rem;
+  }
+  .st-desc{font-size:11px;color:var(--ink-mute);line-height:1.4;}
+
+  /* ===== PILLAR GRID ===== */
+  .pillar-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border:0.5px solid var(--ink-faint);
+    background:var(--paper-dim);
+  }
+  .pillar-cell{
+    padding:2rem 1.75rem 1.75rem;
+    position:relative;
+    border-right:0.5px solid var(--ink-faint);
+  }
+  .pillar-cell:last-child{border-right:none;}
+  .pillar-num{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.2em;
+    color:var(--ink-mute);text-transform:uppercase;margin-bottom:1rem;
+  }
+  .pillar-icon{margin-bottom:1.1rem;}
+  .pillar-name{
+    font-family:var(--serif);font-weight:400;font-style:italic;
+    font-size:22px;color:var(--ink);line-height:1.2;
+    margin-bottom:0.6rem;
+  }
+  .pillar-role{
+    font-size:13.5px;color:var(--ink-soft);line-height:1.55;
+    margin-bottom:1.4rem;min-height:3.4em;
+  }
+  .pillar-metric{
+    border-top:0.5px solid var(--ink-faint);
+    padding-top:1rem;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .pillar-metric .label{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;
+    color:var(--ink-mute);text-transform:uppercase;
+  }
+  .pillar-metric .value{
+    font-family:var(--serif);font-size:24px;font-weight:400;
+    color:var(--accent);
+  }
+  .pillar-metric .unit{
+    font-family:var(--mono);font-size:11px;color:var(--ink-mute);
+    margin-top:2px;
+  }
+
+  /* ===== TWO-COLUMN ===== */
+  .two-col{
+    display:grid;grid-template-columns:1fr 1.05fr;
+    gap:3.5rem;align-items:start;
+  }
+
+  .prose p{font-size:14.5px;line-height:1.7;color:var(--ink-soft);text-align:justify;hyphens:auto;}
+  .prose p+p{margin-top:0.85rem;}
+  .prose em{font-style:italic;font-family:var(--serif);font-size:16px;color:var(--ink);}
+
+  ul.bp-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;}
+  ul.bp-list li{
+    position:relative;
+    padding:10px 0 10px 22px;
+    font-size:13.5px;line-height:1.6;color:var(--ink-soft);
+    border-top:0.5px solid var(--ink-faint);
+  }
+  ul.bp-list li:first-child{border-top:none;}
+  ul.bp-list li::before{
+    content:"";position:absolute;
+    left:0;top:18px;width:10px;height:1px;
+    background:var(--accent);
+  }
+  ul.bp-list li strong{color:var(--ink);font-weight:500;}
+  ul.bp-list li em{font-style:italic;font-family:var(--serif);font-size:15px;color:var(--ink);}
+
+  /* ===== DATA CARD ===== */
+  .data-card{
+    background:var(--paper-dim);
+    border-left:2px solid var(--accent);
+    padding:1.4rem 1.6rem;
+    margin-top:1.4rem;
+  }
+  .data-card h4{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-mute);
+    font-weight:500;margin-bottom:0.9rem;
+  }
+  .dl{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:8px;font-size:13px;}
+  .dl dt{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;white-space:nowrap;}
+  .dl dd{color:var(--ink);font-family:var(--serif);font-size:14px;}
+
+  /* ===== SVG FIGURE ===== */
+  .fig-frame{
+    background:var(--paper-dim);
+    border:0.5px solid var(--ink-faint);
+    padding:1.5rem;position:relative;
+  }
+  .fig-frame .fig-cap{
+    margin-top:1rem;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-mute);text-align:center;
+  }
+  .fig-frame svg{width:100%;height:auto;display:block;}
+
+  /* ===== CODE FRAME ===== */
+  .code-frame{
+    background:var(--ink);
+    border:0.5px solid rgba(26,24,21,0.5);
+    padding:1.5rem 1.75rem;
+    position:relative;overflow:hidden;
+  }
+  .code-frame::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(to right,rgba(245,242,235,0.022) 1px,transparent 1px),
+      linear-gradient(to bottom,rgba(245,242,235,0.022) 1px,transparent 1px);
+    background-size:28px 28px;pointer-events:none;
+  }
+  .code-label{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--accent-glow);
+    margin-bottom:1rem;display:block;position:relative;z-index:1;
+  }
+  .code-frame pre{
+    font-family:var(--mono);font-size:11.5px;line-height:1.65;
+    color:rgba(245,242,235,0.82);overflow-x:auto;
+    position:relative;z-index:1;white-space:pre;
+    tab-size:2;
+  }
+  .kw{color:#5094D8;}
+  .fn{color:#7EC8A4;}
+  .cm{color:rgba(245,242,235,0.36);font-style:italic;}
+  .st{color:#E8B97A;}
+  .nm{color:#C9A0E8;}
+  .code-frame .fig-cap{
+    margin-top:1.1rem;font-family:var(--mono);font-size:10px;
+    letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,242,235,0.38);
+    text-align:left;position:relative;z-index:1;
+  }
+
+  /* ===== DARK IMPACT BAND ===== */
+  .impact-band{
+    background:var(--ink);color:var(--paper);
+    padding:4rem 0 3.5rem;position:relative;overflow:hidden;
+  }
+  .impact-band::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(to right,rgba(245,242,235,0.04) 1px,transparent 1px),
+      linear-gradient(to bottom,rgba(245,242,235,0.04) 1px,transparent 1px);
+    background-size:40px 40px;pointer-events:none;
+  }
+  .impact-band .container{position:relative;z-index:2;}
+  .impact-band .section-head{border-bottom-color:rgba(245,242,235,0.18);}
+  .impact-band .section-head h2{color:var(--paper);}
+  .impact-band .section-head .meta{color:rgba(245,242,235,0.55);}
+
+  .ledger-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border-top:0.5px solid rgba(245,242,235,0.18);
+    border-bottom:0.5px solid rgba(245,242,235,0.18);
+  }
+  .ledger-grid>div{
+    padding:1.6rem 1.5rem 1.6rem 0;
+    border-right:0.5px solid rgba(245,242,235,0.18);
+  }
+  .ledger-grid>div:last-child{border-right:none;padding-right:0;}
+  .ledger-grid>div+div{padding-left:1.75rem;}
+  .lk{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;
+    text-transform:uppercase;color:rgba(245,242,235,0.55);margin-bottom:0.6rem;
+  }
+  .lv{
+    font-family:var(--serif);font-size:54px;font-weight:300;
+    line-height:1;color:var(--paper);letter-spacing:-0.02em;
+  }
+  .lv .unit{
+    font-family:var(--mono);font-size:13px;color:var(--accent-glow);
+    letter-spacing:0.1em;margin-left:6px;
+  }
+  .ld{margin-top:0.9rem;font-size:13px;color:rgba(245,242,235,0.7);line-height:1.55;}
+
+  .pull-quote{
+    margin-top:2.25rem;
+    font-family:var(--serif);font-style:italic;font-weight:300;
+    font-size:20px;line-height:1.45;
+    color:rgba(245,242,235,0.85);max-width:64ch;
+  }
+  .pull-quote .qmark{
+    font-family:var(--mono);font-style:normal;font-size:11px;
+    letter-spacing:0.18em;color:var(--accent-glow);
+    margin-right:14px;vertical-align:middle;
+  }
+
+  /* ===== STAT ROW (BELOW LEDGER) ===== */
+  .stat-row{
+    margin-top:2.25rem;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:0.5px solid rgba(245,242,235,0.18);
+    padding-top:1.4rem;
+  }
+  .stat-row .sk{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.16em;
+    text-transform:uppercase;color:rgba(245,242,235,0.5);margin-bottom:6px;
+  }
+  .stat-row .sv{
+    font-family:var(--serif);font-size:22px;color:var(--paper);font-style:italic;
+  }
+  .stat-row .sd{
+    font-size:11.5px;color:rgba(245,242,235,0.55);margin-top:4px;line-height:1.4;
+  }
+
+  /* ===== FLOW STRIP ===== */
+  .flow-strip{
+    display:grid;grid-template-columns:repeat(5,1fr);
+    gap:0;margin-top:2.25rem;
+    border:0.5px solid var(--ink-faint);
+  }
+  .flow-step{
+    padding:1.5rem 1.25rem;
+    border-right:0.5px solid var(--ink-faint);
+    position:relative;background:var(--paper-dim);
+  }
+  .flow-step:last-child{border-right:none;}
+  .flow-step::after{
+    content:"→";
+    position:absolute;right:-11px;top:50%;
+    transform:translateY(-50%);
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    z-index:2;background:var(--paper-dim);
+    width:22px;text-align:center;
+  }
+  .flow-step:last-child::after{display:none;}
+  .flow-num{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:0.16em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:0.6rem;
+  }
+  .flow-title{
+    font-family:var(--serif);font-style:italic;font-size:16px;
+    color:var(--ink);line-height:1.2;margin-bottom:0.5rem;
+  }
+  .flow-desc{font-size:12px;color:var(--ink-mute);line-height:1.5;}
+
+  /* ===== PROJECT FOOTER ===== */
+  .project-footer{
+    border-top:0.5px solid var(--ink-faint);
+    padding:2.5rem 0 5rem;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:20px;
+  }
+  .pf-link{
+    text-decoration:none;color:var(--ink);
+    display:flex;flex-direction:column;gap:6px;transition:color .2s;
+  }
+  .pf-link:hover{color:var(--accent);}
+  .pf-link .pfk{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.18em;
+    color:var(--ink-mute);text-transform:uppercase;
+  }
+  .pf-link .pfv{font-family:var(--serif);font-style:italic;font-size:18px;}
+
+  footer.site{
+    border-top:0.5px solid var(--ink-faint);
+    padding:1.6rem 0;
+    font-family:var(--mono);font-size:10.5px;
+    letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--ink-mute);text-align:center;
+  }
+
+  /* ===== REVEAL ===== */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:960px){
+    .pillar-grid{grid-template-columns:1fr;}
+    .pillar-cell{border-right:none;border-bottom:0.5px solid var(--ink-faint);}
+    .pillar-cell:last-child{border-bottom:none;}
+    .two-col{grid-template-columns:1fr;gap:2rem;}
+    .flow-strip{grid-template-columns:1fr 1fr;}
+    .flow-step::after{display:none;}
+    .sheet-map{grid-template-columns:repeat(3,1fr);}
+    .sheet-tab:nth-child(3){border-right:none;}
+    .sheet-tab:nth-child(4){border-top:0.5px solid var(--ink-faint);}
+    .ledger-grid{grid-template-columns:1fr;}
+    .ledger-grid>div{border-right:none;border-bottom:0.5px solid rgba(245,242,235,0.18);padding:1.4rem 0!important;}
+    .ledger-grid>div:last-child{border-bottom:none;}
+    .stat-row{grid-template-columns:repeat(2,1fr);gap:1.2rem;}
+    .nav-links a:nth-child(2){display:none;}
+  }
+  @media(max-width:560px){
+    .sheet-map{grid-template-columns:repeat(2,1fr);}
+    .stat-row{grid-template-columns:1fr;}
+    .flow-strip{grid-template-columns:1fr;}
+    .container{padding:0 22px;}
+    nav .inner{padding:14px 22px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="inner">
+    <a href="index.html#top" class="logo">
+      <svg width="22" height="22" viewBox="-22 -22 44 44">
+        <g>
+          <circle cx="0" cy="0" r="14" fill="none" stroke="#1A1815" stroke-width="0.8"/>
+          <circle cx="0" cy="0" r="6"  fill="none" stroke="#1A1815" stroke-width="0.8"/>
+          <g stroke="#1A1815" stroke-width="0.8" fill="none">
+            <line x1="0" y1="-18" x2="0" y2="-14"/>
+            <line x1="0" y1="14"  x2="0" y2="18"/>
+            <line x1="-18" y1="0" x2="-14" y2="0"/>
+            <line x1="14"  y1="0" x2="18"  y2="0"/>
+            <g transform="rotate(45)">
+              <line x1="0" y1="-18" x2="0" y2="-14"/>
+              <line x1="0" y1="14"  x2="0" y2="18"/>
+              <line x1="-18" y1="0" x2="-14" y2="0"/>
+              <line x1="14"  y1="0" x2="18"  y2="0"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span>ABOUT.ME</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#domains">Domains</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html" class="home-back">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <!-- Hero SVG: Excel workbook schematic — campaign data grid, macro flow, sheet tabs, pie chart -->
+  <svg class="hero-bg" viewBox="0 0 1280 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <pattern id="grid-hero" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1A1815" stroke-width="0.3" opacity="0.1"/>
+      </pattern>
+      <marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B3F82"/>
+      </marker>
+    </defs>
+    <rect width="1280" height="560" fill="url(#grid-hero)"/>
+
+    <!-- Spreadsheet column header row -->
+    <g opacity="0.55">
+      <rect x="560" y="56" width="640" height="22" fill="#1B3F82" fill-opacity="0.1"/>
+      <line x1="560" y1="56" x2="1200" y2="56" stroke="#1A1815" stroke-width="0.5"/>
+      <line x1="560" y1="78" x2="1200" y2="78" stroke="#1A1815" stroke-width="0.5"/>
+      <text x="572" y="71" font-family="ui-monospace,monospace" font-size="8" fill="#1B3F82" letter-spacing="0.14em">VIN-17</text>
+      <text x="680" y="71" font-family="ui-monospace,monospace" font-size="8" fill="#1B3F82" letter-spacing="0.14em">CAMPAIGN-NAME</text>
+      <text x="838" y="71" font-family="ui-monospace,monospace" font-size="8" fill="#1B3F82" letter-spacing="0.14em">SESSION RESULT</text>
+      <text x="988" y="71" font-family="ui-monospace,monospace" font-size="8" fill="#1B3F82" letter-spacing="0.14em">SERIES</text>
+      <text x="1068" y="71" font-family="ui-monospace,monospace" font-size="8" fill="#1B3F82" letter-spacing="0.14em">MARKET</text>
+      <text x="1140" y="71" font-family="ui-monospace,monospace" font-size="8" fill="#1B3F82" letter-spacing="0.14em">I-LEVEL</text>
+    </g>
+
+    <!-- Data rows -->
+    <g opacity="0.45">
+      <!-- Row 1 -->
+      <rect x="560" y="78" width="640" height="20" fill="#1B3F82" fill-opacity="0.05"/>
+      <text x="572" y="91" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">WBAXXXXXXX1234567</text>
+      <text x="680" y="91" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">SIB-23-07-2340</text>
+      <rect x="838" y="82" width="56" height="11" rx="1" fill="#1B3F82" fill-opacity="0.18"/>
+      <text x="866" y="91" font-family="ui-monospace,monospace" font-size="7" fill="#1B3F82" text-anchor="middle">SUCCESS</text>
+      <text x="988" y="91" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">G20</text>
+      <text x="1068" y="91" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">UK</text>
+      <text x="1140" y="91" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">3.45.0</text>
+      <!-- Row 2 -->
+      <text x="572" y="111" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">WBAXXXXXXX9876543</text>
+      <text x="680" y="111" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">SIB-23-07-2340</text>
+      <rect x="838" y="102" width="52" height="11" rx="1" fill="#993C1D" fill-opacity="0.15"/>
+      <text x="864" y="111" font-family="ui-monospace,monospace" font-size="7" fill="#993C1D" text-anchor="middle">FAILURE</text>
+      <text x="988" y="111" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">G30</text>
+      <text x="1068" y="111" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">DE</text>
+      <text x="1140" y="111" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">3.42.1</text>
+      <!-- Row 3 -->
+      <rect x="560" y="118" width="640" height="20" fill="#1B3F82" fill-opacity="0.05"/>
+      <text x="572" y="131" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">WBAXXXXXXX5551234</text>
+      <text x="680" y="131" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">SIB-23-08-1102</text>
+      <rect x="838" y="122" width="56" height="11" rx="1" fill="#1B3F82" fill-opacity="0.18"/>
+      <text x="866" y="131" font-family="ui-monospace,monospace" font-size="7" fill="#1B3F82" text-anchor="middle">SUCCESS</text>
+      <text x="988" y="131" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">G12</text>
+      <text x="1068" y="131" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">UK</text>
+      <text x="1140" y="131" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">3.44.0</text>
+      <!-- Row 4 -->
+      <text x="572" y="151" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">WBAXXXXXXX3334567</text>
+      <text x="680" y="151" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">SIB-23-08-1102</text>
+      <rect x="838" y="142" width="52" height="11" rx="1" fill="#993C1D" fill-opacity="0.15"/>
+      <text x="864" y="151" font-family="ui-monospace,monospace" font-size="7" fill="#993C1D" text-anchor="middle">FAILURE</text>
+      <text x="988" y="151" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">G22</text>
+      <text x="1068" y="151" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">UK</text>
+      <text x="1140" y="151" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">3.40.2</text>
+      <!-- Dotted continuation -->
+      <line x1="560" y1="158" x2="1200" y2="158" stroke="#A8A39A" stroke-width="0.4" stroke-dasharray="3 4"/>
+      <text x="880" y="172" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#A8A39A" letter-spacing="0.14em">· · · n ROWS · ALL CAMPAIGN SHEETS · · ·</text>
+    </g>
+
+    <!-- Column dividers -->
+    <g stroke="#1A1815" stroke-width="0.35" opacity="0.28">
+      <line x1="672" y1="56" x2="672" y2="180"/>
+      <line x1="830" y1="56" x2="830" y2="180"/>
+      <line x1="982" y1="56" x2="982" y2="180"/>
+      <line x1="1062" y1="56" x2="1062" y2="180"/>
+      <line x1="1134" y1="56" x2="1134" y2="180"/>
+      <line x1="560" y1="98" x2="1200" y2="98"/>
+      <line x1="560" y1="118" x2="1200" y2="118"/>
+      <line x1="560" y1="138" x2="1200" y2="138"/>
+      <rect x="560" y="56" width="640" height="124" fill="none"/>
+    </g>
+
+    <!-- Macro processing arrow + label -->
+    <g opacity="0.75">
+      <line x1="880" y1="195" x2="880" y2="240" stroke="#1B3F82" stroke-width="1.3" marker-end="url(#arr-b)"/>
+      <rect x="786" y="246" width="188" height="28" rx="2" fill="#1B3F82" fill-opacity="0.12" stroke="#1B3F82" stroke-width="0.5"/>
+      <text x="880" y="263" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8.5" fill="#1B3F82" letter-spacing="0.1em">AnalyzeCampaignSheets()</text>
+    </g>
+
+    <!-- Output: pie chart schematic -->
+    <g transform="translate(880,355)" opacity="0.62">
+      <circle cx="0" cy="0" r="58" fill="none" stroke="#1B3F82" stroke-width="0.6"/>
+      <path d="M 0 0 L 0 -58 A 58 58 0 1 1 -55.1 -16.7 Z" fill="#1B3F82" fill-opacity="0.28"/>
+      <path d="M 0 0 L -55.1 -16.7 A 58 58 0 0 1 0 -58 Z" fill="#A8A39A" fill-opacity="0.35"/>
+      <text x="0" y="77" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862" letter-spacing="0.14em">SUCCESS RATE · RSU</text>
+      <text x="10" y="-10" font-family="ui-monospace,monospace" font-size="9" fill="white" text-anchor="middle">72%</text>
+      <text x="-36" y="34" font-family="ui-monospace,monospace" font-size="7.5" fill="#6B6862">28%</text>
+    </g>
+
+    <!-- Sheet tabs -->
+    <g transform="translate(560,456)" opacity="0.5">
+      <rect x="0"   y="0" width="88" height="18" rx="2 2 0 0" fill="#1B3F82" fill-opacity="0.22" stroke="#1B3F82" stroke-width="0.5"/>
+      <text x="44"  y="12" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#1B3F82">TC Success Rate</text>
+      <rect x="94"  y="0" width="88" height="18" rx="2 2 0 0" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+      <text x="138" y="12" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Complete Dataset</text>
+      <rect x="188" y="0" width="78" height="18" rx="2 2 0 0" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+      <text x="227" y="12" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Unsuccessful VINs</text>
+      <rect x="272" y="0" width="72" height="18" rx="2 2 0 0" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+      <text x="308" y="12" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Customer DB</text>
+      <rect x="350" y="0" width="58" height="18" rx="2 2 0 0" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+      <text x="379" y="12" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Campaign 1</text>
+      <rect x="414" y="0" width="58" height="18" rx="2 2 0 0" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+      <text x="443" y="12" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Campaign 2</text>
+      <line x1="0" y1="18" x2="640" y2="18" stroke="#1A1815" stroke-width="0.4"/>
+    </g>
+
+    <!-- Crosshair compass -->
+    <g transform="translate(1196,480)" opacity="0.45">
+      <circle cx="0" cy="0" r="14" fill="none" stroke="#1A1815" stroke-width="0.5"/>
+      <line x1="0" y1="-14" x2="0" y2="14" stroke="#1A1815" stroke-width="0.4"/>
+      <line x1="-14" y1="0" x2="14" y2="0" stroke="#1A1815" stroke-width="0.4"/>
+      <circle cx="0" cy="0" r="3" fill="none" stroke="#1A1815" stroke-width="0.4"/>
+    </g>
+  </svg>
+
+  <div class="container">
+    <span class="tag-pill reveal">05 / Data &amp; Automation</span>
+
+    <div class="meta-row reveal">
+      <span>BMW Group</span>
+      <span>Excel VBA</span>
+      <span>2024</span>
+      <span>Internal Tool · Dealership Aftersales</span>
+    </div>
+
+    <h1 class="title reveal">BMW Multi-Sheet <em>Excel Automation</em></h1>
+
+    <p class="summary reveal">
+      A purpose-built Excel workbook and VBA macro suite that compresses what was once a manual, multi-hour process into a single button click. Campaign sheets downloaded from the BMW aftersales portal are dropped into the workbook — three macros then traverse every campaign sheet, count VINs, classify session results, cross-reference a live customer database built from BMW AutoLine, and generate per-campaign pie charts and a consolidated success-rate dashboard in <em>under two minutes</em>.
+    </p>
+
+    <div class="btn-row reveal">
+      <a href="index.html#work" class="btn solid">Other projects &rarr;</a>
+      <a href="index.html#contact" class="btn">Get in touch &darr;</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- ============ § 01 / WORKBOOK ARCHITECTURE ============ -->
+<section class="s-block" id="architecture">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 01 / Workbook Architecture</h2>
+      <span class="meta">Six sheets · three macro modules · one button</span>
+    </div>
+
+    <!-- Sheet map -->
+    <div class="sheet-map reveal">
+      <div class="sheet-tab accent-tab">
+        <div class="st-num">Sheet 01</div>
+        <div class="st-name">TC Success Rate</div>
+        <div class="st-desc">Master dashboard. Per-campaign formatted tables, inline pie charts at column E, and the overall RSU chart at N3.</div>
+      </div>
+      <div class="sheet-tab accent-tab">
+        <div class="st-num">Sheet 02</div>
+        <div class="st-name">Complete Dataset</div>
+        <div class="st-desc">Append-only flat table of every processed VIN — 7 columns, pivot-table and Power BI ready.</div>
+      </div>
+      <div class="sheet-tab accent-tab">
+        <div class="st-num">Sheet 03</div>
+        <div class="st-name">Unsuccessful VINs</div>
+        <div class="st-desc">Auto-populated failure log with checkbox column, customer name, phone, and pink-flag rows where AutoLine data is missing.</div>
+      </div>
+      <div class="sheet-tab">
+        <div class="st-num">Sheet 04</div>
+        <div class="st-name">Customer Database</div>
+        <div class="st-desc">Built from BMW AutoLine. VIN-keyed records: customer name, contact number, registration, warranty status.</div>
+      </div>
+      <div class="sheet-tab">
+        <div class="st-num">Sheets 05 → n</div>
+        <div class="st-name">Campaign Sheets</div>
+        <div class="st-desc">RSU/TC files downloaded from the BMW portal. Dropped in raw — no manual reformatting required.</div>
+      </div>
+      <div class="sheet-tab neutral" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:30px;color:var(--accent);opacity:0.4;line-height:1;">+</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;">Scalable</div>
+      </div>
+    </div>
+
+    <!-- Three macro pillars -->
+    <div class="pillar-grid reveal" style="margin-top:2rem;">
+      <div class="pillar-cell">
+        <div class="pillar-num">Macro 01</div>
+        <div class="pillar-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="4" y="6"  width="36" height="4" rx="1" fill="#1B3F82" fill-opacity="0.9"/>
+            <rect x="4" y="12" width="36" height="4" rx="1" fill="#1B3F82" fill-opacity="0.5"/>
+            <rect x="4" y="18" width="36" height="4" rx="1" fill="#1B3F82" fill-opacity="0.3"/>
+            <rect x="4" y="24" width="36" height="4" rx="1" fill="#1B3F82" fill-opacity="0.5"/>
+            <rect x="4" y="30" width="24" height="4" rx="1" fill="#1B3F82" fill-opacity="0.2"/>
+            <circle cx="36" cy="35" r="6" fill="none" stroke="#1B3F82" stroke-width="0.8" fill-opacity="0.1"/>
+            <path d="M 33 35 L 36 32 L 39 35 L 36 38 Z" fill="#1B3F82" fill-opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="pillar-name">AnalyzeCampaignSheets</div>
+        <div class="pillar-role">Loops every campaign sheet from index 6 onward. Counts VINs, classifies Success/Failure, computes contribution rate, writes three formatted rows, and spawns a pie chart per campaign block.</div>
+        <div class="pillar-metric">
+          <span class="label">Output per campaign</span>
+          <span class="value">3 rows + chart</span>
+          <span class="unit">Header · Success row · Failure row · inline pie at col E</span>
+        </div>
+      </div>
+
+      <div class="pillar-cell">
+        <div class="pillar-num">Macro 02</div>
+        <div class="pillar-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="4"  y="4"  width="16" height="16" rx="1" stroke="#1B3F82" stroke-width="0.8" fill="#1B3F82" fill-opacity="0.1"/>
+            <rect x="24" y="4"  width="16" height="16" rx="1" stroke="#1B3F82" stroke-width="0.8" fill="#1B3F82" fill-opacity="0.1"/>
+            <rect x="4"  y="24" width="16" height="16" rx="1" stroke="#1B3F82" stroke-width="0.8" fill="#1B3F82" fill-opacity="0.1"/>
+            <rect x="24" y="24" width="16" height="16" rx="1" stroke="#1B3F82" stroke-width="0.8" fill="#1B3F82" fill-opacity="0.1"/>
+            <line x1="20" y1="12" x2="24" y2="12" stroke="#1B3F82" stroke-width="0.8"/>
+            <line x1="12" y1="20" x2="12" y2="24" stroke="#1B3F82" stroke-width="0.8"/>
+            <line x1="32" y1="20" x2="32" y2="24" stroke="#1B3F82" stroke-width="0.8"/>
+            <line x1="20" y1="32" x2="24" y2="32" stroke="#1B3F82" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="pillar-name">UpdateCompleteDataset</div>
+        <div class="pillar-role">Pulls VIN, session result, series, market, country, i-level, and campaign name from every sheet into a single clean flat table — the data source for pivot tables and Power BI.</div>
+        <div class="pillar-metric">
+          <span class="label">Columns captured</span>
+          <span class="value">7</span>
+          <span class="unit">VIN · Result · Series · Market · Country · I-Level · Campaign</span>
+        </div>
+      </div>
+
+      <div class="pillar-cell">
+        <div class="pillar-num">Macro 03</div>
+        <div class="pillar-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <circle cx="22" cy="13" r="7" stroke="#1B3F82" stroke-width="0.8" fill="#1B3F82" fill-opacity="0.1"/>
+            <line x1="22" y1="20" x2="22" y2="27" stroke="#1B3F82" stroke-width="0.8"/>
+            <rect x="6" y="27" width="32" height="11" rx="1" stroke="#1B3F82" stroke-width="0.8" fill="#1B3F82" fill-opacity="0.1"/>
+            <line x1="14" y1="27" x2="14" y2="38" stroke="#1B3F82" stroke-width="0.4"/>
+            <line x1="22" y1="27" x2="22" y2="38" stroke="#1B3F82" stroke-width="0.4"/>
+            <line x1="30" y1="27" x2="30" y2="38" stroke="#1B3F82" stroke-width="0.4"/>
+            <!-- checkbox indicator -->
+            <rect x="29" y="5" width="8" height="8" rx="1" stroke="#1B3F82" stroke-width="0.7" fill="none"/>
+            <path d="M 30.5 9 L 32.5 11 L 36 7" stroke="#1B3F82" stroke-width="0.8" fill="none"/>
+          </svg>
+        </div>
+        <div class="pillar-name">UpdateUnsuccessfulVINs</div>
+        <div class="pillar-role">Logs every non-Success VIN, deduplicates against existing entries, retrieves customer name and phone from AutoLine, highlights missing-data rows in pink, and inserts a follow-up checkbox in column A.</div>
+        <div class="pillar-metric">
+          <span class="label">Customer fields retrieved</span>
+          <span class="value">Name &amp; Phone</span>
+          <span class="unit">Auto-highlighted · deduped · checkbox-tracked per row</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 02 / ONE-CLICK WORKFLOW ============ -->
+<section class="s-block" style="background:var(--paper-dim);">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 02 / One-Click Workflow</h2>
+      <span class="meta">Download · Drop · Run · Read</span>
+    </div>
+
+    <div class="flow-strip reveal">
+      <div class="flow-step">
+        <div class="flow-num">Step 01</div>
+        <div class="flow-title">Download RSU</div>
+        <div class="flow-desc">Campaign sheet pulled from BMW aftersales portal as-is — no reformatting, no column rearranging.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">Step 02</div>
+        <div class="flow-title">Drop in workbook</div>
+        <div class="flow-desc">Paste the sheet after index 5. The macro detects it automatically by position — no naming conventions needed.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">Step 03</div>
+        <div class="flow-title">Click run</div>
+        <div class="flow-desc">All three macros execute. FindHeaderCol locates columns by text, immune to BMW portal layout changes.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">Step 04</div>
+        <div class="flow-title">Charts &amp; tables</div>
+        <div class="flow-desc">Per-campaign pie charts, success rates, and the overall RSU chart are generated and positioned automatically.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">Step 05</div>
+        <div class="flow-title">Customer report</div>
+        <div class="flow-desc">Failed VINs are cross-referenced with AutoLine, contact details populated, missing records flagged in pink.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 03 / CAMPAIGN ANALYSIS ENGINE ============ -->
+<section class="s-block">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 03 / Campaign Analysis Engine</h2>
+      <span class="meta">AnalyzeCampaignSheets · dynamic header detection · auto chart placement</span>
+    </div>
+
+    <div class="two-col">
+      <div class="prose reveal">
+        <p>The core engine iterates from sheet index 6 onward, calling <em>FindHeaderCol</em> to locate "VIN-17", "Session result", and "Campaign-Name" by scanning row 1 headers — not by fixed column numbers. This makes the macro resilient to BMW portal layout changes across data exports.</p>
+
+        <p>Each VIN is counted and classified with a case-insensitive <em>UCase</em> comparison. Contribution rate — each campaign's VIN share of the total fleet across all loaded sheets — is computed in a two-pass loop: the first pass totals all VINs, the second processes each campaign. Three formatted rows are written per campaign with custom top/bottom borders and 60 pt row heights.</p>
+
+        <ul class="bp-list" style="margin-top:1.1rem;">
+          <li><strong>Dynamic header detection</strong> — FindHeaderCol scans every cell in row 1, making the macro immune to column reordering in future BMW exports.</li>
+          <li><strong>Contribution rate</strong> — each campaign shows its VIN percentage of the entire fleet across all sheets, not just its own data, giving a genuine at-a-glance priority view.</li>
+          <li><strong>Per-campaign pie chart</strong> — 340×155 px, inserted at column E of each block. BMW blue (RGB 0, 51, 153) for success; mid-grey for failure; percentage labels outside.</li>
+          <li><strong>Overall RSU chart</strong> — a second chart at N3, 340×200 px, aggregates all campaigns: title auto-set to "Overall RSU Success Rate — [n] VINs".</li>
+        </ul>
+
+        <div class="data-card">
+          <h4>Runtime spec</h4>
+          <dl class="dl">
+            <dt>Sheet range</dt><dd>Index 6 → ThisWorkbook.Sheets.Count</dd>
+            <dt>Chart (per camp.)</dt><dd>340 × 155 px · column E · row cursor + 15 pt top offset</dd>
+            <dt>Chart (overall)</dt><dd>340 × 200 px · anchored at N3</dd>
+            <dt>Row height</dt><dd>60 pt · horizontal + vertical center</dd>
+            <dt>Success colour</dt><dd>RGB(0, 51, 153) · Failure RGB(191, 191, 191)</dd>
+            <dt>Border style</dt><dd>xlContinuous · top + bottom on header; top on success row; bottom on failure row</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="code-frame reveal">
+        <span class="code-label">AnalyzeCampaignSheets · core classification loop</span>
+<pre><span class="cm">' Two-pass: first count total VINs fleet-wide</span>
+<span class="kw">For</span> sheetIndex = <span class="nm">6</span> <span class="kw">To</span> ThisWorkbook.Sheets.Count
+  <span class="kw">Set</span> ws = ThisWorkbook.Sheets(sheetIndex)
+  vinCol = FindHeaderCol(ws, <span class="st">"VIN-17"</span>)
+  <span class="kw">If</span> vinCol > <span class="nm">0</span> <span class="kw">Then</span>
+    lastDataRow = ws.Cells(ws.Rows.Count, vinCol).End(xlUp).Row
+    <span class="kw">For</span> i = <span class="nm">2</span> <span class="kw">To</span> lastDataRow
+      <span class="kw">If</span> Trim(CStr(ws.Cells(i, vinCol).Value)) &lt;&gt; <span class="st">""</span> <span class="kw">Then</span>
+        totalVINs = totalVINs + <span class="nm">1</span>
+      <span class="kw">End If</span>
+    <span class="kw">Next</span> i
+  <span class="kw">End If</span>
+<span class="kw">Next</span> sheetIndex
+
+<span class="cm">' Second pass: classify each campaign sheet</span>
+<span class="kw">For</span> sheetIndex = <span class="nm">6</span> <span class="kw">To</span> ThisWorkbook.Sheets.Count
+  <span class="kw">Set</span> ws = ThisWorkbook.Sheets(sheetIndex)
+  vinCol      = FindHeaderCol(ws, <span class="st">"VIN-17"</span>)
+  resultCol   = FindHeaderCol(ws, <span class="st">"Session result"</span>)
+  campaignCol = FindHeaderCol(ws, <span class="st">"Campaign-Name"</span>)
+
+  <span class="kw">If</span> vinCol = <span class="nm">0</span> <span class="kw">Or</span> resultCol = <span class="nm">0</span> _
+      <span class="kw">Or</span> campaignCol = <span class="nm">0</span> <span class="kw">Then GoTo</span> ContinueNextSheet
+
+  <span class="kw">For</span> i = <span class="nm">2</span> <span class="kw">To</span> lastDataRow
+    <span class="kw">If</span> Trim(CStr(ws.Cells(i, vinCol).Value)) &lt;&gt; <span class="st">""</span> <span class="kw">Then</span>
+      vinCount = vinCount + <span class="nm">1</span>
+      <span class="kw">If</span> UCase(Trim(CStr( _
+          ws.Cells(i, resultCol).Value))) = <span class="st">"SUCCESS"</span> <span class="kw">Then</span>
+        successCount = successCount + <span class="nm">1</span>
+      <span class="kw">Else</span>
+        failureCount = failureCount + <span class="nm">1</span>
+      <span class="kw">End If</span>
+    <span class="kw">End If</span>
+  <span class="kw">Next</span> i
+
+  contributionRate = Round((vinCount / totalVINs) * <span class="nm">100</span>, <span class="nm">1</span>)
+<span class="kw">Next</span> sheetIndex</pre>
+        <div class="fig-cap">VBA · AnalyzeCampaignSheets · two-pass fleet count + per-campaign classification</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 04 / CUSTOMER DATABASE INTEGRATION ============ -->
+<section class="s-block" style="background:var(--paper-dim);">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 04 / Customer Database Integration</h2>
+      <span class="meta">BMW AutoLine · VIN cross-reference · live contact retrieval</span>
+    </div>
+
+    <div class="two-col" style="grid-template-columns:1.05fr 1fr;gap:3.5rem;">
+      <div class="code-frame reveal">
+        <span class="code-label">UpdateUnsuccessfulVINs · AutoLine lookup + conditional highlight</span>
+<pre><span class="cm">' Skip if VIN already logged</span>
+exists = <span class="kw">False</span>
+<span class="kw">For</span> j = <span class="nm">3</span> <span class="kw">To</span> mainSheet.Cells( _
+    mainSheet.Rows.Count, <span class="st">"B"</span>).End(xlUp).Row
+  <span class="kw">If</span> mainSheet.Cells(j, <span class="st">"B"</span>).Value = vin <span class="kw">Then</span>
+    exists = <span class="kw">True</span>: <span class="kw">Exit For</span>
+  <span class="kw">End If</span>
+<span class="kw">Next</span> j
+
+<span class="kw">If Not</span> exists <span class="kw">Then</span>
+  <span class="cm">' Look up customer in AutoLine database by VIN-17</span>
+  customerName   = <span class="st">""</span>
+  customerNumber = <span class="st">""</span>
+
+  <span class="kw">For</span> custRow = <span class="nm">2</span> <span class="kw">To</span> customerSheet.Cells( _
+      customerSheet.Rows.Count, <span class="st">"B"</span>).End(xlUp).Row
+    <span class="kw">If</span> customerSheet.Cells(custRow, <span class="st">"B"</span>).Value = vin <span class="kw">Then</span>
+      customerName   = customerSheet.Cells(custRow, <span class="st">"J"</span>).Value
+      customerNumber = customerSheet.Cells(custRow, <span class="st">"R"</span>).Value
+      <span class="kw">Exit For</span>
+    <span class="kw">End If</span>
+  <span class="kw">Next</span> custRow
+
+  <span class="cm">' Write row: VIN · name · phone (+prefix) · campaign</span>
+  <span class="kw">With</span> mainSheet
+    .Cells(lastRow, <span class="st">"B"</span>).Value = vin
+    .Cells(lastRow, <span class="st">"C"</span>).Value = customerName
+    .Cells(lastRow, <span class="st">"D"</span>).NumberFormat = <span class="st">"@"</span>
+    <span class="kw">If</span> Trim(customerNumber) &lt;&gt; <span class="st">""</span> <span class="kw">Then</span>
+      .Cells(lastRow, <span class="st">"D"</span>).Value = <span class="st">"+"</span> &amp; Trim(customerNumber)
+    <span class="kw">End If</span>
+    .Cells(lastRow, <span class="st">"E"</span>).Value = campaign
+  <span class="kw">End With</span>
+
+  <span class="cm">' Pink flag if customer data is missing</span>
+  <span class="kw">If</span> customerName = <span class="st">""</span> <span class="kw">Or</span> customerNumber = <span class="st">""</span> <span class="kw">Then</span>
+    mainSheet.Range(<span class="st">"B"</span> &amp; lastRow &amp; <span class="st">":E"</span> &amp; lastRow) _
+      .Interior.Color = RGB(<span class="nm">255</span>, <span class="nm">199</span>, <span class="nm">206</span>)
+  <span class="kw">End If</span>
+<span class="kw">End If</span></pre>
+        <div class="fig-cap">VBA · UpdateUnsuccessfulVINs · dedup guard + AutoLine lookup + conditional highlight</div>
+      </div>
+
+      <div class="reveal">
+        <div class="prose">
+          <p>Every non-Success VIN triggers an exact VIN-17 match against the Customer Database sheet — compiled from BMW <em>AutoLine</em>, the dealer management system. The match returns the customer's name (column J) and phone number (column R).</p>
+          <p>The phone number is stored as text with a "+" prefix to preserve international dialling codes that would otherwise be dropped by Excel's numeric formatting. Rows where either field is blank are highlighted in pink (RGB 255, 199, 206), giving the service team a clear visual flag to chase the record manually rather than guessing which entries are incomplete.</p>
+          <p>A checkbox is inserted into column A of each new row, allowing advisors to tick off follow-ups directly in the sheet — no separate CRM or printout needed.</p>
+        </div>
+
+        <div class="data-card">
+          <h4>AutoLine cross-reference spec</h4>
+          <dl class="dl">
+            <dt>Key field</dt><dd>VIN-17 · column B · exact string match</dd>
+            <dt>Name</dt><dd>Customer full name · column J</dd>
+            <dt>Phone</dt><dd>Contact number · column R · stored as text with "+" prefix</dd>
+            <dt>Dedup</dt><dd>Checked against col B of "TC Unsuccessful VINs" before insert</dd>
+            <dt>Missing flag</dt><dd>RGB(255, 199, 206) across B:E if name or phone is empty</dd>
+            <dt>Tracker</dt><dd>Excel CheckBox · column A · xlOff default · caption cleared</dd>
+          </dl>
+        </div>
+
+        <!-- Unsuccessful VINs sheet mockup -->
+        <div class="fig-frame" style="margin-top:1.4rem;">
+          <svg viewBox="0 0 440 118" aria-label="Unsuccessful VINs sheet preview">
+            <rect x="0" y="0" width="440" height="18" fill="#1B3F82" fill-opacity="0.12"/>
+            <g font-family="ui-monospace,monospace" font-size="7.5" fill="#1B3F82" letter-spacing="0.08em">
+              <text x="8"   y="13">✓</text>
+              <text x="28"  y="13">VIN-17</text>
+              <text x="148" y="13">CUSTOMER</text>
+              <text x="252" y="13">PHONE</text>
+              <text x="352" y="13">CAMPAIGN</text>
+            </g>
+            <!-- Row 1: clean -->
+            <text x="8"   y="33" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">☐</text>
+            <text x="28"  y="33" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">WBAXXX9876543</text>
+            <text x="148" y="33" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">James Thornton</text>
+            <text x="252" y="33" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">+44 7700 900123</text>
+            <text x="352" y="33" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">SIB-23-07-2340</text>
+            <!-- Row 2: pink missing -->
+            <rect x="0" y="38" width="440" height="20" fill="rgb(255,199,206)" fill-opacity="0.5"/>
+            <text x="8"   y="51" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">☐</text>
+            <text x="28"  y="51" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">WBAXXX3334567</text>
+            <text x="148" y="51" font-family="ui-monospace,monospace" font-size="7" fill="#993C1D">— missing —</text>
+            <text x="252" y="51" font-family="ui-monospace,monospace" font-size="7" fill="#993C1D">— missing —</text>
+            <text x="352" y="51" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">SIB-23-07-2340</text>
+            <!-- Row 3: checked -->
+            <text x="8"   y="71" font-family="ui-monospace,monospace" font-size="7" fill="#1B3F82">☑</text>
+            <text x="28"  y="71" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">WBAXXX5551234</text>
+            <text x="148" y="71" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">Sarah Mitchell</text>
+            <text x="252" y="71" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">+44 7911 123456</text>
+            <text x="352" y="71" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">SIB-23-08-1102</text>
+            <!-- Row 4 -->
+            <rect x="0" y="76" width="440" height="20" fill="#1B3F82" fill-opacity="0.04"/>
+            <text x="8"   y="89" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">☐</text>
+            <text x="28"  y="89" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">WBAXXX7772341</text>
+            <text x="148" y="89" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">David Okafor</text>
+            <text x="252" y="89" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">+44 7812 654321</text>
+            <text x="352" y="89" font-family="ui-monospace,monospace" font-size="7" fill="#1A1815">SIB-23-08-1102</text>
+            <!-- Grid -->
+            <g stroke="#A8A39A" stroke-width="0.35">
+              <line x1="0" y1="18" x2="440" y2="18"/>
+              <line x1="0" y1="38" x2="440" y2="38"/>
+              <line x1="0" y1="58" x2="440" y2="58"/>
+              <line x1="0" y1="76" x2="440" y2="76"/>
+              <line x1="0" y1="96" x2="440" y2="96"/>
+              <line x1="22"  y1="0" x2="22"  y2="96"/>
+              <line x1="142" y1="0" x2="142" y2="96"/>
+              <line x1="246" y1="0" x2="246" y2="96"/>
+              <line x1="346" y1="0" x2="346" y2="96"/>
+              <rect x="0" y="0" width="440" height="96" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+            </g>
+            <text x="220" y="112" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#993C1D" letter-spacing="0.1em">PINK ROW = MISSING AUTOLINE RECORD · REQUIRES MANUAL FOLLOW-UP</text>
+          </svg>
+          <div class="fig-cap">Fig. 04-A · TC Unsuccessful VINs sheet · auto-populated from all campaign sheets · pink flag on missing record</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 05 / OUTPUT DASHBOARD ============ -->
+<section class="s-block">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 05 / TC Success Rate Dashboard</h2>
+      <span class="meta">Formatted table · inline pie charts · overall RSU aggregation</span>
+    </div>
+
+    <div class="two-col" style="grid-template-columns:1fr 1fr;gap:2.5rem;">
+      <div class="prose reveal">
+        <p>The TC Success Rate sheet is the at-a-glance output layer. Each campaign occupies exactly three rows — a bold header row with campaign name, VIN count, and contribution percentage; a success rate row; and a failure rate row — all at 60 pt height with matching top/bottom borders.</p>
+        <p>At column E, a 340×155 px pie chart is automatically inserted and positioned against each campaign block, so the team gets an immediate visual read without opening a separate file. Data labels display percentages only, no values, keeping charts uncluttered.</p>
+        <ul class="bp-list" style="margin-top:1.1rem;">
+          <li><strong>Fleet contribution</strong> — each campaign header shows its share of total VINs across all loaded campaign sheets, computed in the two-pass fleet loop.</li>
+          <li><strong>Automatic positioning</strong> — each chart's Left/Top is calculated from the cell anchor, so no manual drag-and-drop is ever needed.</li>
+          <li><strong>Overall RSU chart</strong> — a larger 340×200 px chart at N3 aggregates every campaign into a single fleet-wide success/failure view, with the total VIN count in the title.</li>
+          <li><strong>Bar chart module</strong> — <em>CreateBarChartAtN3</em> renders a clustered-column chart of all campaign success rates at N3 for comparative trending across months.</li>
+        </ul>
+      </div>
+
+      <div class="fig-frame reveal">
+        <svg viewBox="0 0 480 300" aria-label="TC Success Rate sheet layout">
+          <!-- Campaign 1 block -->
+          <rect x="8" y="8" width="290" height="18" fill="#1B3F82" fill-opacity="0.12"/>
+          <text x="14" y="20" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815" font-weight="bold">SIB-23-07-2340</text>
+          <text x="178" y="20" font-family="ui-monospace,monospace" font-size="7" fill="#1B3F82">128 VINs</text>
+          <text x="230" y="20" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">34.2%</text>
+          <rect x="8" y="26" width="290" height="18" fill="none"/>
+          <text x="14" y="38" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Success</text>
+          <rect x="116" y="30" width="42" height="10" rx="1" fill="#1B3F82" fill-opacity="0.15"/>
+          <text x="137" y="38" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1B3F82">72.7%</text>
+          <rect x="8" y="44" width="290" height="18" fill="none"/>
+          <text x="14" y="56" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Failure</text>
+          <rect x="116" y="48" width="42" height="10" rx="1" fill="#993C1D" fill-opacity="0.1"/>
+          <text x="137" y="56" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#993C1D">27.3%</text>
+
+          <!-- Campaign 2 block -->
+          <rect x="8" y="70" width="290" height="18" fill="#1B3F82" fill-opacity="0.12"/>
+          <text x="14" y="82" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815" font-weight="bold">SIB-23-08-1102</text>
+          <text x="178" y="82" font-family="ui-monospace,monospace" font-size="7" fill="#1B3F82">94 VINs</text>
+          <text x="230" y="82" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">25.1%</text>
+          <rect x="8" y="88" width="290" height="18" fill="none"/>
+          <text x="14" y="100" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Success</text>
+          <rect x="116" y="92" width="42" height="10" rx="1" fill="#1B3F82" fill-opacity="0.15"/>
+          <text x="137" y="100" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1B3F82">84.0%</text>
+          <rect x="8" y="106" width="290" height="18" fill="none"/>
+          <text x="14" y="118" font-family="ui-monospace,monospace" font-size="7.5" fill="#1A1815">Failure</text>
+          <rect x="116" y="110" width="42" height="10" rx="1" fill="#993C1D" fill-opacity="0.1"/>
+          <text x="137" y="118" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#993C1D">16.0%</text>
+
+          <!-- Row grid -->
+          <g stroke="#A8A39A" stroke-width="0.35" opacity="0.7">
+            <line x1="8" y1="26" x2="298" y2="26"/>
+            <line x1="8" y1="44" x2="298" y2="44"/>
+            <line x1="8" y1="62" x2="298" y2="62"/>
+            <line x1="8" y1="88" x2="298" y2="88"/>
+            <line x1="8" y1="106" x2="298" y2="106"/>
+            <line x1="8" y1="124" x2="298" y2="124"/>
+            <line x1="108" y1="8" x2="108" y2="124"/>
+            <rect x="8" y="8" width="290" height="116" fill="none" stroke-width="0.5"/>
+          </g>
+
+          <!-- Continuation dots -->
+          <line x1="8" y1="134" x2="298" y2="134" stroke="#A8A39A" stroke-width="0.4" stroke-dasharray="3 3"/>
+          <text x="153" y="148" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#A8A39A" letter-spacing="0.14em">· · · n CAMPAIGNS · · ·</text>
+
+          <!-- Inline pie: campaign 1 -->
+          <g transform="translate(396,55)">
+            <text x="0" y="-46" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862" letter-spacing="0.1em">CAMPAIGN PIE · COL E</text>
+            <circle cx="0" cy="0" r="40" fill="none" stroke="#E5DFD0" stroke-width="0.6"/>
+            <path d="M 0 0 L 0 -40 A 40 40 0 1 1 -38.2 -11.5 Z" fill="#1B3F82" fill-opacity="0.7"/>
+            <path d="M 0 0 L -38.2 -11.5 A 40 40 0 0 1 0 -40 Z" fill="#A8A39A" fill-opacity="0.55"/>
+            <text x="9" y="-8" font-family="ui-monospace,monospace" font-size="8.5" fill="white" text-anchor="middle">72.7%</text>
+            <text x="-28" y="30" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862">27.3%</text>
+            <rect x="-38" y="49" width="7" height="5" fill="#1B3F82" fill-opacity="0.7"/>
+            <text x="-28" y="55" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Success</text>
+            <rect x="8" y="49" width="7" height="5" fill="#A8A39A" fill-opacity="0.55"/>
+            <text x="18" y="55" font-family="ui-monospace,monospace" font-size="6.5" fill="#6B6862">Failure</text>
+          </g>
+
+          <!-- Overall bar chart schematic at bottom -->
+          <g transform="translate(18,168)">
+            <text x="0" y="0" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.1em">OVERALL RSU · N3 BAR CHART</text>
+            <g transform="translate(0,10)">
+              <rect x="0"   y="0" width="34" height="72" rx="1" fill="#1B3F82" fill-opacity="0.18" stroke="#1B3F82" stroke-width="0.35"/>
+              <rect x="0"   y="20" width="34" height="52" rx="1" fill="#1B3F82" fill-opacity="0.55"/>
+              <text x="17"  y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#6B6862">C1</text>
+              <text x="17"  y="17" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#1B3F82">72%</text>
+
+              <rect x="44"  y="0" width="34" height="72" rx="1" fill="#1B3F82" fill-opacity="0.18" stroke="#1B3F82" stroke-width="0.35"/>
+              <rect x="44"  y="10" width="34" height="62" rx="1" fill="#1B3F82" fill-opacity="0.55"/>
+              <text x="61"  y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#6B6862">C2</text>
+              <text x="61"  y="7"  text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#1B3F82">84%</text>
+
+              <rect x="88"  y="0" width="34" height="72" rx="1" fill="#1B3F82" fill-opacity="0.18" stroke="#1B3F82" stroke-width="0.35"/>
+              <rect x="88"  y="24" width="34" height="48" rx="1" fill="#1B3F82" fill-opacity="0.55"/>
+              <text x="105" y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#6B6862">C3</text>
+              <text x="105" y="21" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#1B3F82">68%</text>
+
+              <rect x="132" y="0" width="34" height="72" rx="1" fill="#1B3F82" fill-opacity="0.18" stroke="#1B3F82" stroke-width="0.35"/>
+              <rect x="132" y="14" width="34" height="58" rx="1" fill="#1B3F82" fill-opacity="0.55"/>
+              <text x="149" y="88" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6" fill="#6B6862">C4</text>
+              <text x="149" y="11" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#1B3F82">79%</text>
+
+              <line x1="0" y1="72" x2="170" y2="72" stroke="#A8A39A" stroke-width="0.4"/>
+              <text x="85" y="104" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.08em">SUCCESS RATE BY CAMPAIGN</text>
+            </g>
+          </g>
+        </svg>
+        <div class="fig-cap">Fig. 05-A · TC Success Rate sheet · campaign blocks + inline pie (col E) + overall bar chart (N3)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 06 / OPERATIONAL IMPACT (DARK BAND) ============ -->
+<section class="impact-band">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 06 / Operational Impact</h2>
+      <span class="meta">Time reduction · BMW aftersales workflow</span>
+    </div>
+
+    <div class="ledger-grid reveal">
+      <div>
+        <div class="lk">Time before automation</div>
+        <div class="lv">~1<span class="unit">hr / campaign</span></div>
+        <div class="ld">Manual copy-paste across sheets, individual VIN lookups in AutoLine, handwritten success tallies, no charts. Multiplied by every RSU downloaded per month.</div>
+      </div>
+      <div>
+        <div class="lk">Time after automation</div>
+        <div class="lv">&lt;2<span class="unit">min</span></div>
+        <div class="ld">Drop BMW portal files into the workbook, click one button. All VIN counts, success rates, customer contacts, charts, and pivot-ready data are produced instantly.</div>
+      </div>
+      <div>
+        <div class="lk">Time reduction</div>
+        <div class="lv">97<span class="unit">%</span></div>
+        <div class="ld">From approximately 60 minutes of manual analysis to under 2 minutes of automated processing — across every technical campaign the dealership handles.</div>
+      </div>
+    </div>
+
+    <p class="pull-quote reveal">
+      <span class="qmark">BMW AFTERSALES · INTERNAL</span>
+      What once required an advisor to open multiple files, cross-reference a printed customer log, manually tally VINs per campaign, and build charts by hand — is now a single macro run. The system scales to any number of campaigns without any change to the template.
+    </p>
+
+    <div class="stat-row reveal">
+      <div>
+        <div class="sk">Manual steps eliminated</div>
+        <div class="sv">~15</div>
+        <div class="sd">Copy-paste, VLOOKUP, row format, chart build, phone lookup, dedup…</div>
+      </div>
+      <div>
+        <div class="sk">Charts auto-generated</div>
+        <div class="sv">n + 1</div>
+        <div class="sd">One pie per campaign + one overall RSU chart, auto-positioned at runtime</div>
+      </div>
+      <div>
+        <div class="sk">Database coverage</div>
+        <div class="sv">Full fleet</div>
+        <div class="sd">Entire active vehicle register from BMW AutoLine, keyed on VIN-17</div>
+      </div>
+      <div>
+        <div class="sk">Macro modules</div>
+        <div class="sv">3 + sub</div>
+        <div class="sd">Analyze · Complete Dataset · Unsuccessful VINs · Bar Chart helper</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ § 07 / COMPLETE DATASET ============ -->
+<section class="s-block">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>§ 07 / Complete Dataset &amp; Pivot Integration</h2>
+      <span class="meta">UpdateCompleteDataset · append-only · 7-column flat table</span>
+    </div>
+
+    <div class="two-col" style="grid-template-columns:1fr 1fr;gap:2.5rem;">
+      <div class="prose reveal">
+        <p>The <em>UpdateCompleteDataset</em> macro produces a single clean flat table that accumulates every VIN across all campaign sheets. It is designed as an append-only living record — re-running the macro on a new batch of campaign files adds rows from the next empty row, never overwriting historical data, making it safe to run incrementally across months.</p>
+
+        <ul class="bp-list" style="margin-top:1.1rem;">
+          <li><strong>Seven columns</strong> — VIN, Session Result, Series, Market, Country, Last I-Level in RSA, Campaign Name — covering all dimensions needed for any pivot analysis or Power BI model.</li>
+          <li><strong>Consistent formatting</strong> — every inserted cell is center-aligned, vertically aligned, and bordered on all four edges in a single inner For loop, keeping the table visually clean without a separate formatting pass.</li>
+          <li><strong>Incremental append</strong> — the macro locates the last non-empty row in column A and starts writing from the next row, so partial campaign loads are safe and reversible.</li>
+          <li><strong>Header guard</strong> — any campaign sheet missing one of the seven required column headers is silently skipped via <em>GoTo ContinueNextSheet</em>, preventing partial writes.</li>
+        </ul>
+      </div>
+
+      <div class="reveal">
+        <div class="fig-frame">
+          <svg viewBox="0 0 460 200" aria-label="Complete Dataset structure">
+            <defs>
+              <marker id="arr-ds" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1B3F82"/>
+              </marker>
+            </defs>
+            <!-- Header -->
+            <rect x="0" y="0" width="460" height="17" fill="#1B3F82" fill-opacity="0.15"/>
+            <g font-family="ui-monospace,monospace" font-size="6.5" fill="#1B3F82" letter-spacing="0.06em">
+              <text x="5"   y="11">VIN-17</text>
+              <text x="88"  y="11">RESULT</text>
+              <text x="148" y="11">SERIES</text>
+              <text x="204" y="11">MARKET</text>
+              <text x="256" y="11">COUNTRY</text>
+              <text x="314" y="11">I-LEVEL</text>
+              <text x="368" y="11">CAMPAIGN</text>
+            </g>
+            <!-- Rows -->
+            <g font-family="ui-monospace,monospace" font-size="6.5" fill="#1A1815">
+              <rect x="0" y="17" width="460" height="15" fill="#1B3F82" fill-opacity="0.04"/>
+              <text x="5"   y="27">WBAXXX1234567</text>
+              <rect x="85"  y="20" width="42" height="10" rx="1" fill="#1B3F82" fill-opacity="0.15"/>
+              <text x="106" y="27" text-anchor="middle" fill="#1B3F82">Success</text>
+              <text x="148" y="27">G20</text><text x="204" y="27">UK</text>
+              <text x="256" y="27">GB</text><text x="314" y="27">3.45.0</text>
+              <text x="368" y="27">SIB-23-07-2340</text>
+
+              <text x="5"   y="43">WBAXXX9876543</text>
+              <rect x="85"  y="36" width="42" height="10" rx="1" fill="#993C1D" fill-opacity="0.1"/>
+              <text x="106" y="43" text-anchor="middle" fill="#993C1D">Failure</text>
+              <text x="148" y="43">G30</text><text x="204" y="43">DE</text>
+              <text x="256" y="43">DE</text><text x="314" y="43">3.42.1</text>
+              <text x="368" y="43">SIB-23-07-2340</text>
+
+              <rect x="0" y="47" width="460" height="15" fill="#1B3F82" fill-opacity="0.04"/>
+              <text x="5"   y="57">WBAXXX5551234</text>
+              <rect x="85"  y="50" width="42" height="10" rx="1" fill="#1B3F82" fill-opacity="0.15"/>
+              <text x="106" y="57" text-anchor="middle" fill="#1B3F82">Success</text>
+              <text x="148" y="57">G12</text><text x="204" y="57">UK</text>
+              <text x="256" y="57">GB</text><text x="314" y="57">3.44.0</text>
+              <text x="368" y="57">SIB-23-08-1102</text>
+
+              <text x="5"   y="73">WBAXXX3334567</text>
+              <rect x="85"  y="66" width="42" height="10" rx="1" fill="#993C1D" fill-opacity="0.1"/>
+              <text x="106" y="73" text-anchor="middle" fill="#993C1D">Failure</text>
+              <text x="148" y="73">G22</text><text x="204" y="73">UK</text>
+              <text x="256" y="73">GB</text><text x="314" y="73">3.40.2</text>
+              <text x="368" y="73">SIB-23-08-1102</text>
+            </g>
+            <!-- Dotted continuation -->
+            <line x1="0" y1="80" x2="460" y2="80" stroke="#A8A39A" stroke-width="0.4" stroke-dasharray="3 4"/>
+            <text x="230" y="94" text-anchor="middle" font-family="ui-monospace,monospace" font-size="6.5" fill="#A8A39A" letter-spacing="0.12em">· · · APPEND-ONLY · GROWS INCREMENTALLY WITH EACH MACRO RUN · · ·</text>
+            <!-- Grid lines -->
+            <g stroke="#A8A39A" stroke-width="0.3" opacity="0.65">
+              <line x1="82"  y1="0" x2="82"  y2="80"/>
+              <line x1="144" y1="0" x2="144" y2="80"/>
+              <line x1="200" y1="0" x2="200" y2="80"/>
+              <line x1="252" y1="0" x2="252" y2="80"/>
+              <line x1="310" y1="0" x2="310" y2="80"/>
+              <line x1="364" y1="0" x2="364" y2="80"/>
+              <line x1="0"   y1="32" x2="460" y2="32"/>
+              <line x1="0"   y1="47" x2="460" y2="47"/>
+              <line x1="0"   y1="62" x2="460" y2="62"/>
+              <rect x="0" y="0" width="460" height="80" fill="none" stroke="#A8A39A" stroke-width="0.5"/>
+            </g>
+            <!-- Pivot arrow -->
+            <line x1="230" y1="104" x2="230" y2="132" stroke="#1B3F82" stroke-width="1" marker-end="url(#arr-ds)"/>
+            <rect x="120" y="136" width="220" height="22" rx="2" fill="#1B3F82" fill-opacity="0.1" stroke="#1B3F82" stroke-width="0.5"/>
+            <text x="230" y="151" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7.5" fill="#1B3F82" letter-spacing="0.1em">PIVOT TABLE · POWER BI READY</text>
+            <text x="230" y="185" text-anchor="middle" font-family="ui-monospace,monospace" font-size="7" fill="#6B6862" letter-spacing="0.12em">7 COLUMNS · STATIC HEADERS · CONSISTENT TYPES · NO CLEANING REQUIRED</text>
+          </svg>
+          <div class="fig-cap">Fig. 07-A · Complete Dataset · append-only flat table · direct pivot / Power BI source</div>
+        </div>
+
+        <div class="data-card" style="margin-top:1.25rem;">
+          <h4>Append logic &amp; guard</h4>
+          <dl class="dl">
+            <dt>Start row</dt><dd>Last non-empty row in col A + 1 · min. row 2</dd>
+            <dt>Header guard</dt><dd>GoTo ContinueNextSheet if any of 7 headers is missing</dd>
+            <dt>Dedup</dt><dd>Not applied here — raw append; dedup lives in UpdateUnsuccessfulVINs</dd>
+            <dt>Formatting</dt><dd>Center + all 4 borders per cell in one For c = 1 To 7 pass</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ PROJECT FOOTER ============ -->
+<div class="container">
+  <div class="project-footer">
+    <a href="03-heathrow-water-blueprint.html" class="pf-link">
+      <span class="pfk">&larr; Previous</span>
+      <span class="pfv">03 &middot; Heathrow Net-Zero Water Blueprint</span>
+    </a>
+    <a href="index.html" class="pf-link">
+      <span class="pfk">Back &uarr;</span>
+      <span class="pfv">Index &middot; All projects</span>
+    </a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="container">© Omar Hathat &middot; 2026 &middot; Data &amp; Automation &middot; VBA Excel</div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
