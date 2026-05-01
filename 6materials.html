@@ -57,6 +57,62 @@
   .nav-links .home-back{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--ink-mute);}
   .nav-links a:hover{color:var(--accent);}
 
+  /* ===== PROJECTS DROPDOWN ===== */
+  .nav-item { position: relative; }
+  .nav-item > a { display: flex; align-items: center; gap: 4px; }
+  .nav-dropdown {
+    position: absolute; top: 100%; left: 50%;
+    /* padding-top bridges the gap so the hover area is seamless */
+    padding-top: 0.85rem;
+    transform: translateX(-50%);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  .nav-item:hover .nav-dropdown {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  /* The visible card is a child so padding-top gap stays transparent */
+  .nav-dropdown-inner {
+    background: rgba(245, 242, 235, 0.97);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 0.5px solid var(--ink-faint);
+    box-shadow: 0 6px 24px rgba(26,24,21,0.09);
+    min-width: 270px; padding: 0.35rem 0;
+  }
+  .nav-dropdown a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0.6rem 1.1rem 0.6rem 0.9rem;
+    font-size: 12px; letter-spacing: 0.02em;
+    color: var(--ink-soft); text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+  }
+  .nav-dropdown a:hover {
+    background: var(--paper-dim);
+    color: var(--ink);
+    border-left-color: var(--accent);
+  }
+  .nav-dropdown .dd-num {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    color: var(--ink-mute); flex-shrink: 0; width: 18px;
+    transition: color 0.14s ease;
+  }
+  .nav-dropdown a:hover .dd-num { color: var(--accent); }
+  .nav-caret { font-size: 9px; opacity: 0.55; margin-left: 1px; }
+
+  /* Active Project Highlight */
+  .nav-dropdown a.active-project {
+    background: var(--paper-deep);
+    color: var(--ink);
+    border-left-color: var(--accent);
+    cursor: default;
+  }
+  .nav-dropdown a.active-project .dd-num {
+    color: var(--accent);
+  }
+
   /* ===== LAYOUT ===== */
   .container{max-width:1180px;margin:0 auto;padding:0 2.5rem;}
   section.s-block{padding:4rem 0 2.75rem;position:relative;}
@@ -359,9 +415,20 @@
       <span>ABOUT.ME</span>
     </a>
     <div class="nav-links">
-      <a href="index.html#experience">Experience</a>
-      <a href="index.html#domains">Domains</a>
-      <a href="index.html#work">Work</a>
+      <div class="nav-item">
+        <a href="#">Projects <span class="nav-caret">▾</span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="1mscthesis.html"><span class="dd-num">01</span>Lean Direct Injection H₂ Combustors</a>
+            <a href="2solar.html"><span class="dd-num">02</span>Deming Corridor Solar Farm</a>
+            <a href="3bengthesis.html"><span class="dd-num">03</span>Heathrow Mechanical Water Blueprint</a>
+            <a href="4arboreumbrella.html"><span class="dd-num">04</span>Arboré: Circular Economy Umbrella</a>
+            <a href="5bmwexcel.html"><span class="dd-num">05</span>BMW Multi-Sheet Excel Automation</a>
+            <!-- ⚠️ Active Project Class applied here for Project 06 ⚠️ -->
+            <a href="6materials.html" class="active-project"><span class="dd-num">06</span>Fast Fashion Sustainability LCA</a>
+          </div>
+        </div>
+      </div>
       <a href="index.html" class="home-back">← Home</a>
     </div>
   </div>
@@ -550,7 +617,7 @@
         <ul class="bp-list" style="margin-top:1.25rem;">
           <li><strong>Forties Pipeline shutdown 2021</strong> — 3-week maintenance outage drove a 21% production uptick in Q2 2022, totalling 27.4 Mtoe.</li>
           <li><strong>Primary electricity &amp; bioenergy</strong> — the only two categories growing since 1990; bioenergy rose from 0.7 → 12.8 Mtoe over 31 years.</li>
-          <li><strong>Nuclear forecast</strong> — 9 active reactors, 6.5 GW current; new-build programme targets 24 GW by 2050 (25% of UK electricity).</li>
+          <li><strong>Nuclear forecast</strong> — 9 active reactors, 6.5 GW current; new-build programme target 24 GW by 2050 (25% of UK electricity).</li>
           <li><strong>1.1 million</strong> renewable installations by end 2021 — greatest since 2015, adding 7,200 MW of PV-led capacity.</li>
         </ul>
       </div>
